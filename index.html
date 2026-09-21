@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+                #bg{width:100%}
+
+    #duck1{
+        width:23%;
+        position:absolute;
+        left:17vw;
+        top:23vw;
+    }
+
+    #duck2{
+        width:25%;
+        position:absolute;
+        left:37vw;
+        top:34vw;
+    }
+
+    #duck3{
+        width:22%;
+        position:absolute;
+        left:69vw;
+        top:23vw;
+    }      
+        </style>
+</head>
+
+<body>
+
+<div id="scene">
+
+        <audio src="BGM.mp3" autoplay loop></audio>
+
+        <img src="full.png" id="bg">
+
+        <audio src="ss1.mp3" id="s1"></audio>
+        <img src="before.1.png" id="duck1">
+        
+        <audio src="ss2.mp3" id="s2"></audio>
+        <img src="before.2.png" id="duck2">
+
+        <audio src="ss3.mp3" id="s3"></audio>
+        <img src="before.3.png" id="duck3">
+
+</div>
+
+
+<script>
+
+s1.volume = 1;
+s2.volume = 1;
+s3.volume = 1;
+
+
+let tabaco1 = "no";
+
+duck1.onclick = function(){   
+
+        if(tabaco1 == "no"){
+
+                duck1.src = "after.1.png";
+                tabaco1 = "yes";
+
+                duck1.style.width = "25%";
+                duck1.style.left = "16vw";
+                duck1.style.top = "22vw";
+
+                setTimeout(function(){
+
+                        duck1.src = "before.1.png";
+                        duck1.style.width = "23%";
+                        duck1.style.left = "17vw";
+                        duck1.style.top = "23vw";
+                        tabaco1 = "no";
+
+                }, 800);
+
+        }else if(tabaco1 == "yes"){
+
+                duck1.src = "before.1.png";
+                duck1.style.width = "23%";
+                duck1.style.left = "17vw";
+                duck1.style.top = "23vw";
+                tabaco1 = "no";
+
+        }
+
+        s1.play();
+
+};  
+
+
+let tabaco2 = "no";
+
+duck2.onclick = function(){   
+
+        if(tabaco2 == "no"){
+
+                duck2.src = "after.2.png";
+                tabaco2 = "yes";
+
+                duck2.style.width = "28%";
+                duck2.style.left = "36vw";
+                duck2.style.top = "32vw";
+
+                setTimeout(function(){
+
+                        duck2.src = "before.2.png";
+                        tabaco2 = "no";
+                        duck2.style.width = "25%";
+                        duck2.style.left = "37vw";
+                        duck2.style.top = "34vw";
+
+                }, 800);
+
+        }else if(tabaco2 == "yes"){
+
+                duck2.src = "before.2.png";
+                tabaco2 = "no";
+                duck2.style.width = "25%";
+                duck2.style.left = "37vw";
+                duck2.style.top = "34vw";
+
+        }
+
+        s2.play();
+
+};  
+
+
+let tabaco3 = "no";
+
+duck3.onclick = function(){   
+
+        if(tabaco3 == "no"){
+
+                duck3.src = "after.3.png";
+                tabaco3 = "yes";
+
+                duck3.style.width = "25%";
+                duck3.style.left = "67vw";
+                duck3.style.top = "22vw";
+
+                setTimeout(function(){
+
+                        duck3.src = "before.3.png";
+                        tabaco3 = "no";
+                        duck3.style.width = "22%";
+                        duck3.style.left = "69vw";
+                        duck3.style.top = "23vw";
+
+                }, 800);
+
+        }else if(tabaco3 == "yes"){
+
+                duck3.src = "before.3.png";
+                tabaco3 = "no";
+                duck3.style.width = "22%";
+                duck3.style.left = "69vw";
+                duck3.style.top = "23vw";
+
+        }
+
+        s3.play();
+
+};  
+
+</script>
+
+</body>
+</html>
