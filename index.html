@@ -28,7 +28,6 @@
             top:225px;
         }
 
-
         #b1{
             width:172px;
             position:absolute;
@@ -36,14 +35,12 @@
             top:137px;
         }
 
-
         #y1{
             width:179px;
             position:absolute;
             left:174px;
             top:292px;
         }
-
 
         #o1{
             width:179px;
@@ -59,7 +56,7 @@
             top:324px;
         }
 
-
+        /* 파란 꽃 가운데 노란 원 */
         #y2{
             width:32px;
             position:absolute;
@@ -67,6 +64,7 @@
             top:212px;
         }
 
+        /* 아래 주황 꽃의 노란 점 3개 */
         #y3{
             width:54px;
             position:absolute;
@@ -74,40 +72,38 @@
             top:391px;
         }
 
+        /* 노란 꽃 가운데의 주황 타원 - 원래 g3는 초록색이라 색만 돌려서 사용 */
         #g3{
             width:46px;
             position:absolute;
             left:243px;
             top:353px;
-
-            filter:hue-rotate(-50deg) saturate(3);
+            filter:hue-rotate(-60deg) saturate(3);
         }
- 
 
-        #g2_2{
+        /* 위 주황 꽃의 노란 무늬 - g2 하나를 두 번 사용 */
+        #g2_1{
             width:90px;
             height:280px;
             position:absolute;
             left:480px;
             top:60px;
-
-            transform:rotate(10deg);
-
-            filter:hue-rotate(-45deg) saturate(3) brightness(1.4);
+            transform:rotate(23deg);
+            filter:hue-rotate(-40deg) saturate(3) brightness(1.4);
         }
 
+        /* 클릭 가능한 에셋 */
         .flowerAsset{
             cursor:pointer;
         }
 
+        /* 오른쪽 글자 */
         #nameMoniter{
             width:360px;
             position:absolute;
             left:720px;
             top:125px;
-
             text-align:right;
-
             font-family:"Comic Sans MS", sans-serif;
             font-size:60px;
             font-weight:500;
@@ -117,25 +113,21 @@
             position:absolute;
             left:798px;
             top:232px;
-
             font-family:"Comic Sans MS", sans-serif;
             font-size:78px;
             font-weight:500;
         }
 
+        /* 이름 입력 */
         #text{
             width:165px;
             height:25px;
-
             position:absolute;
             left:793px;
             top:349px;
-
             border:1px solid #bbbbbb;
             border-radius:20px;
-
             background:white;
-
             padding-left:10px;
         }
 
@@ -143,162 +135,102 @@
             position:absolute;
             left:974px;
             top:352px;
-
             border:0;
             border-radius:12px;
-
             padding:5px 10px;
         }
 
+        /* 색상 슬라이더 */
         #slider{
             width:320px;
-
             position:absolute;
             left:800px;
             top:695px;
-
             accent-color:#004dff;
         }
-
     </style>
 </head>
 
-
 <body>
-
     <div id="wrap">
 
-
+        <!-- 줄기부터 먼저 두고, 꽃을 그 위에 올림 -->
         <img src="g1.svg" id="g1" class="flowerAsset">
 
-
         <img src="b1.svg" id="b1" class="flowerAsset">
-
         <img src="y1.svg" id="y1" class="flowerAsset">
-
         <img src="o1.svg" id="o1" class="flowerAsset">
-
         <img src="o2.svg" id="o2" class="flowerAsset">
 
-
         <img src="y2.svg" id="y2" class="flowerAsset">
-
         <img src="y3.svg" id="y3" class="flowerAsset">
-
         <img src="g3.svg" id="g3" class="flowerAsset">
 
+        <img src="g2.svg" id="g2_1" class="flowerAsset">
 
-        <img src="g2.svg" id="g2_2" class="flowerAsset">
-
-
+        <!-- 이름 -->
         <div id="nameMoniter">'S</div>
-
         <div id="flowerText">FLOWER</div>
 
-
         <input type="text" id="text">
-
         <button id="okay">확인</button>
 
-
-        <input
-            type="range"
-            id="slider"
-            min="0"
-            max="360"
-            value="0"
-        >
-
+        <!-- 선택한 꽃의 색을 바꾸는 슬라이더 -->
+        <input type="range" id="slider" min="0" max="360" value="0">
 
     </div>
 
-
-
     <script>
-        */
+        /* 처음에는 파란 꽃이 선택되어 있음 */
         var choice = b1;
 
+        /* 에셋을 클릭하면 choice가 그 에셋으로 바뀜 */
         b1.onclick = function(){
-
             choice = b1;
-
         }
-
 
         g1.onclick = function(){
-
             choice = g1;
-
         }
-
 
         y1.onclick = function(){
-
             choice = y1;
-
         }
-
 
         o1.onclick = function(){
-
             choice = o1;
-
         }
-
 
         o2.onclick = function(){
-
             choice = o2;
-
         }
-
 
         y2.onclick = function(){
-
             choice = y2;
-
         }
-
 
         y3.onclick = function(){
-
             choice = y3;
-
         }
-
 
         g3.onclick = function(){
-
             choice = g3;
-
         }
 
-
-
-
-        g2_2.onclick = function(){
-
-            choice = g2_2;
-
+        g2_1.onclick = function(){
+            choice = g2_1;
         }
 
-
+       
+        /* 슬라이더를 움직이면 방금 클릭한 에셋의 색이 변함 */
         slider.oninput = function(){
-
-            choice.style.filter =
-            "hue-rotate(" + slider.value + "deg)";
-
+            choice.style.filter = "hue-rotate(" + slider.value + "deg)";
         }
 
+        /* 이름 입력 후 확인을 누르면 이름 + 'S 가 표시됨 */
         okay.onclick = function(){
-
-            nameMoniter.innerHTML =
-            text.value + "'S";
-
+            nameMoniter.innerHTML = text.value + "'S";
         }
-
-
     </script>
-
 </body>
 </html>
