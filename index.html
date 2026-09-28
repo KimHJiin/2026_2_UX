@@ -1,175 +1,304 @@
 <!DOCTYPE html>
 <html>
 <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
-                #bg{width:100%}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MY FLOWER</title>
 
-    #duck1{
-        width:23%;
-        position:absolute;
-        left:17vw;
-        top:23vw;
-    }
+    <style>
+        body{
+            margin:0;
+            background:#fffbee;
+        }
 
-    #duck2{
-        width:25%;
-        position:absolute;
-        left:37vw;
-        top:34vw;
-    }
+        #wrap{
+            width:1280px;
+            height:832px;
+            position:relative;
+            margin:0 auto;
+            overflow:hidden;
+            background:#fffbee;
+        }
 
-    #duck3{
-        width:22%;
-        position:absolute;
-        left:69vw;
-        top:23vw;
-    }      
-        </style>
+
+        #g1{
+            width:370px;
+            position:absolute;
+            left:228px;
+            top:225px;
+        }
+
+
+        #b1{
+            width:172px;
+            position:absolute;
+            left:255px;
+            top:137px;
+        }
+
+
+        #y1{
+            width:179px;
+            position:absolute;
+            left:174px;
+            top:292px;
+        }
+
+
+        #o1{
+            width:179px;
+            position:absolute;
+            left:449px;
+            top:102px;
+        }
+
+        #o2{
+            width:160px;
+            position:absolute;
+            left:321px;
+            top:324px;
+        }
+
+
+        #y2{
+            width:32px;
+            position:absolute;
+            left:327px;
+            top:212px;
+        }
+
+        #y3{
+            width:54px;
+            position:absolute;
+            left:379px;
+            top:391px;
+        }
+
+        #g3{
+            width:46px;
+            position:absolute;
+            left:243px;
+            top:353px;
+
+            filter:hue-rotate(-50deg) saturate(3);
+        }
+ 
+
+        #g2_2{
+            width:90px;
+            height:280px;
+            position:absolute;
+            left:480px;
+            top:60px;
+
+            transform:rotate(10deg);
+
+            filter:hue-rotate(-45deg) saturate(3) brightness(1.4);
+        }
+
+        .flowerAsset{
+            cursor:pointer;
+        }
+
+        #nameMoniter{
+            width:360px;
+            position:absolute;
+            left:720px;
+            top:125px;
+
+            text-align:right;
+
+            font-family:"Comic Sans MS", sans-serif;
+            font-size:60px;
+            font-weight:500;
+        }
+
+        #flowerText{
+            position:absolute;
+            left:798px;
+            top:232px;
+
+            font-family:"Comic Sans MS", sans-serif;
+            font-size:78px;
+            font-weight:500;
+        }
+
+        #text{
+            width:165px;
+            height:25px;
+
+            position:absolute;
+            left:793px;
+            top:349px;
+
+            border:1px solid #bbbbbb;
+            border-radius:20px;
+
+            background:white;
+
+            padding-left:10px;
+        }
+
+        #okay{
+            position:absolute;
+            left:974px;
+            top:352px;
+
+            border:0;
+            border-radius:12px;
+
+            padding:5px 10px;
+        }
+
+        #slider{
+            width:320px;
+
+            position:absolute;
+            left:800px;
+            top:695px;
+
+            accent-color:#004dff;
+        }
+
+    </style>
 </head>
+
 
 <body>
 
-<div id="scene">
-
-        <audio src="BGM.mp3" autoplay loop></audio>
-
-        <img src="full.png" id="bg">
-
-        <audio src="ss1.mp3" id="s1"></audio>
-        <img src="before.1.png" id="duck1">
-        
-        <audio src="ss2.mp3" id="s2"></audio>
-        <img src="before.2.png" id="duck2">
-
-        <audio src="ss3.mp3" id="s3"></audio>
-        <img src="before.3.png" id="duck3">
-
-</div>
+    <div id="wrap">
 
 
-<script>
-
-s1.volume = 1;
-s2.volume = 1;
-s3.volume = 1;
+        <img src="g1.svg" id="g1" class="flowerAsset">
 
 
-let tabaco1 = "no";
+        <img src="b1.svg" id="b1" class="flowerAsset">
 
-duck1.onclick = function(){   
+        <img src="y1.svg" id="y1" class="flowerAsset">
 
-        if(tabaco1 == "no"){
+        <img src="o1.svg" id="o1" class="flowerAsset">
 
-                duck1.src = "after.1.png";
-                tabaco1 = "yes";
-
-                duck1.style.width = "25%";
-                duck1.style.left = "16vw";
-                duck1.style.top = "22vw";
-
-                setTimeout(function(){
-
-                        duck1.src = "before.1.png";
-                        duck1.style.width = "23%";
-                        duck1.style.left = "17vw";
-                        duck1.style.top = "23vw";
-                        tabaco1 = "no";
-
-                }, 800);
-
-        }else if(tabaco1 == "yes"){
-
-                duck1.src = "before.1.png";
-                duck1.style.width = "23%";
-                duck1.style.left = "17vw";
-                duck1.style.top = "23vw";
-                tabaco1 = "no";
-
-        }
-
-        s1.play();
-
-};  
+        <img src="o2.svg" id="o2" class="flowerAsset">
 
 
-let tabaco2 = "no";
+        <img src="y2.svg" id="y2" class="flowerAsset">
 
-duck2.onclick = function(){   
+        <img src="y3.svg" id="y3" class="flowerAsset">
 
-        if(tabaco2 == "no"){
+        <img src="g3.svg" id="g3" class="flowerAsset">
 
-                duck2.src = "after.2.png";
-                tabaco2 = "yes";
 
-                duck2.style.width = "28%";
-                duck2.style.left = "36vw";
-                duck2.style.top = "32vw";
+        <img src="g2.svg" id="g2_2" class="flowerAsset">
 
-                setTimeout(function(){
 
-                        duck2.src = "before.2.png";
-                        tabaco2 = "no";
-                        duck2.style.width = "25%";
-                        duck2.style.left = "37vw";
-                        duck2.style.top = "34vw";
+        <div id="nameMoniter">'S</div>
 
-                }, 800);
+        <div id="flowerText">FLOWER</div>
 
-        }else if(tabaco2 == "yes"){
 
-                duck2.src = "before.2.png";
-                tabaco2 = "no";
-                duck2.style.width = "25%";
-                duck2.style.left = "37vw";
-                duck2.style.top = "34vw";
+        <input type="text" id="text">
+
+        <button id="okay">확인</button>
+
+
+        <input
+            type="range"
+            id="slider"
+            min="0"
+            max="360"
+            value="0"
+        >
+
+
+    </div>
+
+
+
+    <script>
+        */
+        var choice = b1;
+
+        b1.onclick = function(){
+
+            choice = b1;
 
         }
 
-        s2.play();
 
-};  
+        g1.onclick = function(){
 
-
-let tabaco3 = "no";
-
-duck3.onclick = function(){   
-
-        if(tabaco3 == "no"){
-
-                duck3.src = "after.3.png";
-                tabaco3 = "yes";
-
-                duck3.style.width = "25%";
-                duck3.style.left = "67vw";
-                duck3.style.top = "22vw";
-
-                setTimeout(function(){
-
-                        duck3.src = "before.3.png";
-                        tabaco3 = "no";
-                        duck3.style.width = "22%";
-                        duck3.style.left = "69vw";
-                        duck3.style.top = "23vw";
-
-                }, 800);
-
-        }else if(tabaco3 == "yes"){
-
-                duck3.src = "before.3.png";
-                tabaco3 = "no";
-                duck3.style.width = "22%";
-                duck3.style.left = "69vw";
-                duck3.style.top = "23vw";
+            choice = g1;
 
         }
 
-        s3.play();
 
-};  
+        y1.onclick = function(){
 
-</script>
+            choice = y1;
+
+        }
+
+
+        o1.onclick = function(){
+
+            choice = o1;
+
+        }
+
+
+        o2.onclick = function(){
+
+            choice = o2;
+
+        }
+
+
+        y2.onclick = function(){
+
+            choice = y2;
+
+        }
+
+
+        y3.onclick = function(){
+
+            choice = y3;
+
+        }
+
+
+        g3.onclick = function(){
+
+            choice = g3;
+
+        }
+
+
+
+
+        g2_2.onclick = function(){
+
+            choice = g2_2;
+
+        }
+
+
+        slider.oninput = function(){
+
+            choice.style.filter =
+            "hue-rotate(" + slider.value + "deg)";
+
+        }
+
+        okay.onclick = function(){
+
+            nameMoniter.innerHTML =
+            text.value + "'S";
+
+        }
+
+
+    </script>
 
 </body>
 </html>
