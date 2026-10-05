@@ -1,236 +1,605 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>MY FLOWER</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GEOMETRIC SOUND</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Unbounded:wght@700&display=swap');
 
-    <style>
-        body{
-            margin:0;
-            background:#fffbee;
-        }
-
-        #wrap{
-            width:1280px;
-            height:832px;
-            position:relative;
-            margin:0 auto;
-            overflow:hidden;
-            background:#fffbee;
-        }
-
-
-        #g1{
-            width:370px;
-            position:absolute;
-            left:228px;
-            top:225px;
-        }
-
-        #b1{
-            width:172px;
-            position:absolute;
-            left:255px;
-            top:137px;
-        }
-
-        #y1{
-            width:179px;
-            position:absolute;
-            left:174px;
-            top:292px;
-        }
-
-        #o1{
-            width:179px;
-            position:absolute;
-            left:449px;
-            top:102px;
-        }
-
-        #o2{
-            width:160px;
-            position:absolute;
-            left:321px;
-            top:324px;
-        }
-
-        /* 파란 꽃 가운데 노란 원 */
-        #y2{
-            width:32px;
-            position:absolute;
-            left:327px;
-            top:212px;
-        }
-
-        /* 아래 주황 꽃의 노란 점 3개 */
-        #y3{
-            width:54px;
-            position:absolute;
-            left:379px;
-            top:391px;
-        }
-
-        /* 노란 꽃 가운데의 주황 타원 - 원래 g3는 초록색이라 색만 돌려서 사용 */
-        #g3{
-            width:46px;
-            position:absolute;
-            left:243px;
-            top:353px;
-            filter:hue-rotate(-60deg) saturate(3);
-        }
-
-        /* 위 주황 꽃의 노란 무늬 - g2 하나를 두 번 사용 */
-        #g2_1{
-            width:90px;
-            height:280px;
-            position:absolute;
-            left:480px;
-            top:60px;
-            transform:rotate(23deg);
-            filter:hue-rotate(-40deg) saturate(3) brightness(1.4);
-        }
-
-        /* 클릭 가능한 에셋 */
-        .flowerAsset{
-            cursor:pointer;
-        }
-
-        /* 오른쪽 글자 */
-        #nameMoniter{
-            width:360px;
-            position:absolute;
-            left:720px;
-            top:125px;
-            text-align:right;
-            font-family:"Comic Sans MS", sans-serif;
-            font-size:60px;
-            font-weight:500;
-        }
-
-        #flowerText{
-            position:absolute;
-            left:798px;
-            top:232px;
-            font-family:"Comic Sans MS", sans-serif;
-            font-size:78px;
-            font-weight:500;
-        }
-
-        /* 이름 입력 */
-        #text{
-            width:165px;
-            height:25px;
-            position:absolute;
-            left:793px;
-            top:349px;
-            border:1px solid #bbbbbb;
-            border-radius:20px;
-            background:white;
-            padding-left:10px;
-        }
-
-        #okay{
-            position:absolute;
-            left:974px;
-            top:352px;
-            border:0;
-            border-radius:12px;
-            padding:5px 10px;
-        }
-
-        /* 색상 슬라이더 */
-        #slider{
-            width:320px;
-            position:absolute;
-            left:800px;
-            top:695px;
-            accent-color:#004dff;
-        }
-    </style>
+*{box-sizing:border-box}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#fff;color:#14151f}
+body{font-family:"IBM Plex Mono",monospace}
+canvas{position:fixed;left:0;top:0;width:100%;height:100%;touch-action:none}
+.top,.bottom{
+  position:fixed;left:0;right:0;z-index:2;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;pointer-events:none;
+}
+.top{top:0}.bottom{bottom:0}
+.group{display:flex;align-items:center;gap:8px;pointer-events:auto;flex-wrap:wrap}
+button{
+  font:500 11px "IBM Plex Mono",monospace;color:#14151f;
+  border:1.5px solid #14151f;background:rgba(255,255,255,.94);
+  padding:9px 11px;cursor:pointer;
+}
+button:hover,button.active{background:#14151f;color:#fff}
+.info{
+  font-size:10px;border:1.5px solid #14151f;
+  padding:9px 11px;background:rgba(255,255,255,.94);
+}
+@media(max-width:700px){
+  .top,.bottom{padding:9px;gap:6px;align-items:flex-start}
+    button{font-size:9px;padding:8px}
+  .info{font-size:9px;padding:8px}
+  .bottom{align-items:flex-end}
+}
+</style>
 </head>
-
 <body>
-    <div id="wrap">
+<canvas id="canvas"></canvas>
 
-        <!-- 줄기부터 먼저 두고, 꽃을 그 위에 올림 -->
-        <img src="g1.svg" id="g1" class="flowerAsset">
+<div class="top">
+  <div class="group">
+    <button id="soundButton">SOUND ON</button>
+    <button id="resetButton">RESET</button>
+  </div>
+</div>
 
-        <img src="b1.svg" id="b1" class="flowerAsset">
-        <img src="y1.svg" id="y1" class="flowerAsset">
-        <img src="o1.svg" id="o1" class="flowerAsset">
-        <img src="o2.svg" id="o2" class="flowerAsset">
+<div class="bottom">
+  <div class="group">
+    <button id="addButton">+ ADD SHAPE</button>
+  </div>
+</div>
 
-        <img src="y2.svg" id="y2" class="flowerAsset">
-        <img src="y3.svg" id="y3" class="flowerAsset">
-        <img src="g3.svg" id="g3" class="flowerAsset">
+<script>
+// ==============================================
+// GEOMETRIC SOUND
+// 변수, 함수, 이벤트, 반복문, 조건문, 배열, 백틱 사용
+// ==============================================
 
-        <img src="g2.svg" id="g2_1" class="flowerAsset">
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
-        <!-- 이름 -->
-        <div id="nameMoniter">'S</div>
-        <div id="flowerText">FLOWER</div>
+const soundButton = document.getElementById("soundButton");
+const resetButton = document.getElementById("resetButton");
+const addButton = document.getElementById("addButton");
 
-        <input type="text" id="text">
-        <button id="okay">확인</button>
+// 배열: 파스텔 색상 팔레트
+const palettes = [
+  {name:"CANDY", colors:["#F5B7C8","#F7D68A","#A9D8E8","#C7B5E8","#F2A98B","#C8E0A5","#E8C5E8"]}
+];
 
-        <!-- 선택한 꽃의 색을 바꾸는 슬라이더 -->
-        <input type="range" id="slider" min="0" max="360" value="0">
+// 배열: 도형 종류
+const shapeTypes = ["circle","square","triangle","line","dot","roundedRect"];
 
-    </div>
+// 배열: 화면에 그려질 도형들
+let shapes = [];
 
-    <script>
-        /* 처음에는 파란 꽃이 선택되어 있음 */
-        var choice = b1;
+// 배열: 현재 프레임에서 충돌한 도형 조합
+let currentCollisions = [];
 
-        /* 에셋을 클릭하면 choice가 그 에셋으로 바뀜 */
-        b1.onclick = function(){
-            choice = b1;
+let selectedShape = -1;
+let isDragging = false;
+let soundOn = true;
+let audioContext = null;
+let width = 0;
+let height = 0;
+let dpr = 1;
+let lastMouseX = 0;
+let lastMouseY = 0;
+let mouseX = -100;
+let mouseY = -100;
+let mouseVX = 0;
+let mouseVY = 0;
+let mouseRadius = 24;
+let mouseDown = false;
+
+// 캔버스 크기 설정
+function resizeCanvas(){
+  dpr = Math.min(window.devicePixelRatio || 1, 2);
+  width = window.innerWidth;
+  height = window.innerHeight;
+
+  canvas.width = width * dpr;
+  canvas.height = height * dpr;
+  canvas.style.width = width + "px";
+  canvas.style.height = height + "px";
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+window.addEventListener("resize", resizeCanvas);
+
+// 랜덤 숫자를 만드는 함수
+function randomNumber(min,max){
+  return Math.random() * (max-min) + min;
+}
+
+// 도형의 크기와 충돌 범위
+function getRadius(shape){
+  if(shape.type === "line"){
+    return shape.size * 1.1;
+  }else if(shape.type === "dot"){
+    return shape.size + 4;
+  }else{
+    return shape.size * 0.8;
+  }
+}
+
+// 도형 하나를 만드는 함수
+function makeShape(type,x,y){
+  let size = randomNumber(12,42);
+  let colorIndex = Math.floor(Math.random() * palettes[0].colors.length);
+
+  let newShape = {
+    type:type,
+    x:x,
+    y:y,
+    size:size,
+    color:palettes[0].colors[colorIndex],
+    vx:0,
+    vy:0,
+    rotation:randomNumber(0,6.28),
+    rotationSpeed:randomNumber(-0.008,0.008),
+    hit:0,
+    burst:0
+  };
+
+  return newShape;
+}
+
+// 여러 도형을 배열에 넣는 함수
+function makeShapes(){
+  shapes = [];
+  currentCollisions = [];
+
+  // 반복문: 도형 32개 생성
+  for(let i=0;i<32;i++){
+    let typeIndex = Math.floor(Math.random() * shapeTypes.length);
+    let x = randomNumber(35,width-35);
+    let y = randomNumber(75,height-75);
+    let newShape = makeShape(shapeTypes[typeIndex],x,y);
+    shapes.push(newShape);
+  }
+
+}
+
+// 도형 그리기 함수
+function drawShape(shape){
+  ctx.save();
+  ctx.translate(shape.x,shape.y);
+  ctx.rotate(shape.rotation);
+
+  let scale = 1 + shape.hit * 0.18;
+  if(shapes[selectedShape] === shape && isDragging){
+    scale = 1.12;
+  }
+  ctx.scale(scale,scale);
+
+  ctx.fillStyle = shape.color;
+  ctx.strokeStyle = shape.color;
+  ctx.lineWidth = 5;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+
+  // 조건문: 도형 종류에 따라 다른 모양 그리기
+  if(shape.type === "circle"){
+    ctx.beginPath();
+    ctx.arc(0,0,shape.size,0,Math.PI*2);
+    ctx.fill();
+
+  }else if(shape.type === "square"){
+    ctx.fillRect(-shape.size,-shape.size,shape.size*2,shape.size*2);
+
+  }else if(shape.type === "triangle"){
+    ctx.beginPath();
+    ctx.moveTo(0,-shape.size);
+    ctx.lineTo(shape.size,shape.size);
+    ctx.lineTo(-shape.size,shape.size);
+    ctx.closePath();
+    ctx.fill();
+
+  }else if(shape.type === "line"){
+    ctx.beginPath();
+    ctx.moveTo(-shape.size*1.5,0);
+    ctx.lineTo(shape.size*1.5,0);
+    ctx.stroke();
+
+  }else if(shape.type === "dot"){
+    ctx.beginPath();
+    ctx.arc(0,0,shape.size*0.28,0,Math.PI*2);
+    ctx.fill();
+
+  }else if(shape.type === "roundedRect"){
+    ctx.beginPath();
+    ctx.roundRect(-shape.size*1.2,-shape.size*0.7,shape.size*2.4,shape.size*1.4,8);
+    ctx.fill();
+  }
+
+  // 선택한 도형에 얇은 테두리 표시
+  if(shapes[selectedShape] === shape && isDragging){
+    ctx.beginPath();
+    ctx.arc(0,0,shape.size+9,0,Math.PI*2);
+    ctx.strokeStyle = "#14151f";
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+  }
+
+  ctx.restore();
+}
+
+// 도형과 마우스 사이의 거리
+function getDistance(x1,y1,x2,y2){
+  let dx = x2-x1;
+  let dy = y2-y1;
+  return Math.sqrt(dx*dx+dy*dy);
+}
+
+// 오디오 시작 함수: 첫 터치/클릭에서 실행
+function startAudio(){
+  if(audioContext === null){
+    let AudioClass = window.AudioContext || window.webkitAudioContext;
+    if(AudioClass){
+      audioContext = new AudioClass();
+    }
+  }
+
+  if(audioContext && audioContext.state === "suspended"){
+    audioContext.resume();
+  }
+}
+
+// 충돌할 때 소리 내는 함수
+function playCollisionSound(shapeA,shapeB,force){
+  if(!soundOn){
+    return;
+  }
+
+  startAudio();
+  if(audioContext === null){
+    return;
+  }
+
+  let oscillator = audioContext.createOscillator();
+  let gain = audioContext.createGain();
+
+  // 도형 종류에 따라 파형을 다르게 설정
+  if(shapeA.type === "circle" || shapeB.type === "circle"){
+    oscillator.type = "sine";
+  }else if(shapeA.type === "triangle" || shapeB.type === "triangle"){
+    oscillator.type = "square";
+  }else if(shapeA.type === "line" || shapeB.type === "line"){
+    oscillator.type = "sawtooth";
+  }else{
+    oscillator.type = "triangle";
+  }
+
+  // 충돌 속도에 따라 음 높이와 음량 변경
+  let frequency = 220 + Math.min(force*90,650);
+  let volume = Math.min(0.18,0.035 + force*0.025);
+  let now = audioContext.currentTime;
+
+  oscillator.frequency.setValueAtTime(frequency,now);
+  gain.gain.setValueAtTime(0.001,now);
+  gain.gain.exponentialRampToValueAtTime(volume,now+0.015);
+  gain.gain.exponentialRampToValueAtTime(0.001,now+0.22);
+
+  oscillator.connect(gain);
+  gain.connect(audioContext.destination);
+  oscillator.start(now);
+  oscillator.stop(now+0.23);
+
+}
+
+// 도형끼리 충돌 확인
+function checkCollisions(){
+  let newCollisions = [];
+
+  // 반복문: 모든 도형 조합 확인
+  for(let i=0;i<shapes.length;i++){
+    for(let j=i+1;j<shapes.length;j++){
+      let a = shapes[i];
+      let b = shapes[j];
+
+      let dx = b.x-a.x;
+      let dy = b.y-a.y;
+      let distance = Math.sqrt(dx*dx+dy*dy);
+      let minDistance = getRadius(a)+getRadius(b);
+
+      // 조건문: 두 도형이 부딪혔는지 확인
+      if(distance < minDistance){
+        let key = i + "-" + j;
+        newCollisions.push(key);
+
+        if(distance === 0){
+          distance = 0.1;
         }
 
-        g1.onclick = function(){
-            choice = g1;
+        let normalX = dx/distance;
+        let normalY = dy/distance;
+        let overlap = minDistance-distance;
+
+        // 겹친 만큼 서로 반대 방향으로 밀어냄
+        a.x -= normalX*overlap*0.5;
+        a.y -= normalY*overlap*0.5;
+        b.x += normalX*overlap*0.5;
+        b.y += normalY*overlap*0.5;
+
+        // 두 도형의 속도를 비교해서 튕겨나가는 힘 계산
+        let relativeX = b.vx-a.vx;
+        let relativeY = b.vy-a.vy;
+        let speed = relativeX*normalX + relativeY*normalY;
+
+        // 서로 다가오고 있을 때만 튕겨냄
+        if(speed < 0){
+          let bounce = 1.15;
+          let impulse = Math.min(Math.abs(speed) + 0.55, 1.5) * bounce;
+          a.vx -= normalX*impulse;
+          a.vy -= normalY*impulse;
+          b.vx += normalX*impulse;
+          b.vy += normalY*impulse;
+          a.burst = 1;
+          b.burst = 1;
         }
 
-        y1.onclick = function(){
-            choice = y1;
+        // 충돌이 새로 시작된 순간에만 소리
+        let wasColliding = false;
+        for(let k=0;k<currentCollisions.length;k++){
+          if(currentCollisions[k] === key){
+            wasColliding = true;
+          }
         }
 
-        o1.onclick = function(){
-            choice = o1;
+        if(!wasColliding){
+          let force = Math.abs(speed) + 0.4;
+          playCollisionSound(a,b,force);
+          a.hit = 1;
+          b.hit = 1;
+        }
+      }
+    }
+  }
+
+  // 마우스 커서를 하나의 원형 도형처럼 사용
+  // 마우스를 움직이는 동안 닿은 도형을 밀어냄
+  for(let i=0;i<shapes.length;i++){
+    let shape = shapes[i];
+
+    let dx = shape.x-mouseX;
+    let dy = shape.y-mouseY;
+    let distance = Math.sqrt(dx*dx+dy*dy);
+    let minDistance = getRadius(shape)+mouseRadius;
+
+    // 조건문: 마우스와 도형이 닿았는지 확인
+    if(distance < minDistance && mouseDown){
+      if(distance === 0){
+        distance = 0.1;
+      }
+
+      let normalX = dx/distance;
+      let normalY = dy/distance;
+      let overlap = minDistance-distance;
+
+      // 마우스에서 멀어지는 방향으로 도형을 밀어냄
+      shape.x += normalX*overlap;
+      shape.y += normalY*overlap;
+
+      // 마우스의 움직이는 방향을 도형에 전달
+      let push = Math.sqrt(mouseVX*mouseVX+mouseVY*mouseVY);
+      shape.vx += normalX*Math.min(push*0.18+0.18, 0.65);
+      shape.vy += normalY*Math.min(push*0.18+0.18, 0.65);
+      shape.burst = 1;
+
+      // 도형이 마우스에 닿을 때마다 살짝 커짐
+      shape.hit = 1;
+
+      // 빠르게 움직이는 커서에 닿으면 소리
+      if(push > 0.15){
+        let cursorKey = "mouse-" + i;
+        let alreadyHit = false;
+
+        for(let k=0;k<currentCollisions.length;k++){
+          if(currentCollisions[k] === cursorKey){
+            alreadyHit = true;
+          }
         }
 
-        o2.onclick = function(){
-            choice = o2;
+        if(!alreadyHit){
+          playCollisionSound(shape,shape,Math.min(push+0.4,3));
+          newCollisions.push(cursorKey);
         }
+      }
+    }
+  }
 
-        y2.onclick = function(){
-            choice = y2;
-        }
+  currentCollisions = newCollisions;
+}
 
-        y3.onclick = function(){
-            choice = y3;
-        }
+// 마우스/터치 위치에 있는 도형 찾기
+function findShape(x,y){
+  for(let i=shapes.length-1;i>=0;i--){
+    let distance = getDistance(x,y,shapes[i].x,shapes[i].y);
+    if(distance < getRadius(shapes[i])+12){
+      return i;
+    }
+  }
+  return -1;
+}
 
-        g3.onclick = function(){
-            choice = g3;
-        }
+// 마우스 또는 손가락 누르기
+canvas.addEventListener("pointerdown",function(e){
+  startAudio();
 
-        g2_1.onclick = function(){
-            choice = g2_1;
-        }
+  let rect = canvas.getBoundingClientRect();
+  let x = e.clientX-rect.left;
+  let y = e.clientY-rect.top;
 
-       
-        /* 슬라이더를 움직이면 방금 클릭한 에셋의 색이 변함 */
-        slider.oninput = function(){
-            choice.style.filter = "hue-rotate(" + slider.value + "deg)";
-        }
+  mouseX = x;
+  mouseY = y;
+  mouseVX = 0;
+  mouseVY = 0;
+  mouseDown = true;
 
-        /* 이름 입력 후 확인을 누르면 이름 + 'S 가 표시됨 */
-        okay.onclick = function(){
-            nameMoniter.innerHTML = text.value + "'S";
-        }
-    </script>
+  selectedShape = findShape(x,y);
+  lastMouseX = x;
+  lastMouseY = y;
+
+  if(selectedShape !== -1){
+    isDragging = true;
+    canvas.setPointerCapture(e.pointerId);
+  }
+});
+
+// 마우스 또는 손가락 움직이기
+canvas.addEventListener("pointermove",function(e){
+  let rect = canvas.getBoundingClientRect();
+  let x = e.clientX-rect.left;
+  let y = e.clientY-rect.top;
+
+  let moveX = x-lastMouseX;
+  let moveY = y-lastMouseY;
+
+  // 변수: 마우스 자체의 이동 속도
+  mouseVX = moveX;
+  mouseVY = moveY;
+  mouseX = x;
+  mouseY = y;
+
+  if(isDragging && selectedShape !== -1){
+
+    // 선택한 도형을 마우스 위치만큼 이동
+    shapes[selectedShape].x += moveX;
+    shapes[selectedShape].y += moveY;
+
+    // 드래그한 힘을 도형의 속도로 전달
+    shapes[selectedShape].vx = moveX*0.12;
+    shapes[selectedShape].vy = moveY*0.12;
+  }
+
+  lastMouseX = x;
+  lastMouseY = y;
+});
+
+// 마우스 또는 손가락 놓기
+canvas.addEventListener("pointerup",function(){
+  isDragging = false;
+  selectedShape = -1;
+  mouseDown = false;
+  mouseVX = 0;
+  mouseVY = 0;
+});
+
+canvas.addEventListener("pointercancel",function(){
+  isDragging = false;
+  selectedShape = -1;
+  mouseDown = false;
+  mouseVX = 0;
+  mouseVY = 0;
+});
+
+canvas.addEventListener("pointerleave",function(){
+  mouseX = -100;
+  mouseY = -100;
+  mouseDown = false;
+});
+
+// 소리 켜기/끄기 버튼
+soundButton.onclick = function(){
+  soundOn = !soundOn;
+
+  if(soundOn){
+    startAudio();
+    soundButton.innerHTML = "SOUND ON";
+  }else{
+    soundButton.innerHTML = "SOUND OFF";
+  }
+};
+
+// 왼쪽 아래 버튼으로 랜덤 도형 하나 추가
+addButton.onclick = function(){
+  startAudio();
+  let typeIndex = Math.floor(Math.random() * shapeTypes.length);
+  let margin = 55;
+  let x = randomNumber(margin, Math.max(margin + 1, width - margin));
+  let y = randomNumber(70, Math.max(71, height - 70));
+  let newShape = makeShape(shapeTypes[typeIndex], x, y);
+  shapes.push(newShape);
+};
+
+// 처음 상태로 되돌리기
+resetButton.onclick = function(){
+  makeShapes();
+
+};
+
+// 스페이스바로 소리 켜기/끄기
+window.addEventListener("keydown",function(e){
+  if(e.code === "Space"){
+    e.preventDefault();
+    soundButton.click();
+  }
+});
+
+// 애니메이션 함수
+function animate(){
+  ctx.clearRect(0,0,width,height);
+
+  // 마우스 커서를 하나의 도형처럼 보여주는 작은 원
+  if(mouseDown){
+    ctx.beginPath();
+    ctx.arc(mouseX,mouseY,mouseRadius,0,Math.PI*2);
+    ctx.strokeStyle = "#14151f";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+
+  // 반복문: 모든 도형의 위치와 회전 업데이트
+  for(let i=0;i<shapes.length;i++){
+    let shape = shapes[i];
+
+    // 드래그 중인 도형은 마우스를 따라가므로 자동 이동 제외
+    if(!(isDragging && selectedShape === i)){
+      shape.x += shape.vx;
+      shape.y += shape.vy;
+    }
+
+    shape.rotation += shape.rotationSpeed;
+
+    // 평소에는 거의 정지하고, 충돌 직후의 움직임만 짧게 유지
+    shape.vx *= 0.94;
+    shape.vy *= 0.94;
+    shape.burst *= 0.92;
+    if(Math.abs(shape.vx) < 0.006) shape.vx = 0;
+    if(Math.abs(shape.vy) < 0.006) shape.vy = 0;
+
+    // 화면 가장자리에서 튕기기
+    if(shape.x < 20 || shape.x > width-20){
+      shape.vx *= -1;
+    }
+    if(shape.y < 45 || shape.y > height-35){
+      shape.vy *= -1;
+    }
+
+    // 속도가 너무 커지지 않도록 조절
+    if(shape.vx > 0.9) shape.vx = 0.9;
+    if(shape.vx < -0.9) shape.vx = -0.9;
+    if(shape.vy > 0.9) shape.vy = 0.9;
+    if(shape.vy < -0.9) shape.vy = -0.9;
+
+    // 충돌 효과가 서서히 사라짐
+    shape.hit *= 0.88;
+
+    drawShape(shape);
+  }
+
+  checkCollisions();
+  requestAnimationFrame(animate);
+}
+
+// 처음 실행
+resizeCanvas();
+makeShapes();
+animate();
+
+</script>
 </body>
 </html>
