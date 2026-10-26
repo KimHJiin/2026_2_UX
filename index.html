@@ -20,110 +20,452 @@
 .popup.is-ad .no-dismiss-note{font-size:10px;opacity:.58;margin-top:9px;margin-bottom:0}
 .popup.is-ad .popup-head span{font-size:10px;letter-spacing:.045em}
 @media(max-height:680px){.ad-poster{height:95px}.ad-graphic{font-size:58px}.popup.is-ad h3{font-size:25px;margin:8px 0}.popup.is-ad .popup-body{padding:12px 16px}.popup.is-ad p{font-size:12px;line-height:1.4;margin-bottom:8px}}
-</style></head><body><header><div class="brand">✳</div><nav><button id="homeNav">처음으로</button><button id="testNav">심리테스트 ↗</button><button id="aboutNav">테스트 안내</button></nav></header><main class="stage"><section class="view hero" id="home"><div class="eyebrow"><span>나의 성향 알아보기 / 2026</span><span>30개의 질문 · 나만의 결과</span></div><h1>It's all<br><em>about you.</em></h1><p class="sub">일상의 작은 선택으로 알아보는 나의 성향. 정답은 없으니 마음 가는 대로 골라보세요.</p><span class="pill p1">나만의 성향</span><span class="pill p2">오늘의 나를 발견해요</span><span class="pill p3">시작해 볼까요? ↗</span><span class="pill p4">나를 알아가는 시간</span><div class="dome"><div class="eyes"><div class="eye"><div class="pupil"></div></div><div class="eye"><div class="pupil"></div></div></div></div><button class="start" id="start">테스트 시작하기 ↗</button><span class="footer-note">당신은 어떤 유형일까요?</span></section><section class="view test hidden" id="test"><div class="test-top micro"><span>01 / 나의 유형 찾기</span><span id="count">질문 01 / 30</span></div><div id="questionArea"><h2 id="question"></h2><div class="choices" id="choices"></div><div class="progress"><div id="bar"></div></div></div><div id="resultArea" hidden><div class="micro">당신의 아주 공식적인 결과 ↗</div><h2 id="resultTitle"></h2><p class="result-description" id="resultText"></p><button class="restart" id="restart">처음부터 다시하기 ↗</button></div></section></main><div class="popup-layer" id="popupLayer"></div><script>
-const questions=[{"q":"갑자기 두 시간이 비었다. 당신의 선택은?","a":[["혼자만의 시간을 만끽한다",0],["친구에게 바로 연락한다",1],["새로운 장소로 나가본다",2],["일단 할 일 목록을 정리한다",3]]},{"q":"친구가 고민을 털어놓는다면?","a":[["조용히 끝까지 들어준다",0],["함께 감정을 나눈다",1],["색다른 해결책을 제안한다",2],["현실적인 계획을 세워준다",3]]},{"q":"마음에 드는 물건을 발견했다!","a":[["하루쯤 생각해 본다",0],["친구들의 의견을 묻는다",1],["끌리면 바로 구매한다",2],["가격과 리뷰를 비교한다",3]]},{"q":"처음 가는 파티에서 당신은?","a":[["구석에서 분위기를 관찰한다",0],["먼저 사람들에게 인사한다",1],["가장 재밌는 곳부터 찾아간다",2],["누가 왔는지 파악한다",3]]},{"q":"여행 계획을 세울 때 가장 중요한 것은?","a":[["느긋하게 쉴 시간",0],["함께할 사람들",1],["예상 못 한 모험",2],["정확한 일정표",3]]},{"q":"낯선 카페에 들어갔다. 어디에 앉을까?","a":[["창가의 조용한 구석",0],["사람들 사이의 큰 테이블",1],["그날 가장 끌리는 자리",2],["콘센트가 가까운 자리",3]]},{"q":"단체 채팅방에 메시지가 쏟아진다면?","a":[["필요한 대화만 조용히 읽는다",0],["재밌는 이야기에 바로 끼어든다",1],["갑자기 새로운 화제를 던진다",2],["대화를 정리해 공유한다",3]]},{"q":"주말 아침 눈을 뜬 순간 드는 생각은?","a":[["조용한 아침을 오래 누리고 싶다",0],["누구와 브런치를 먹을까?",1],["오늘 어디로 떠나볼까?",2],["오늘 할 일을 먼저 확인하자",3]]},{"q":"처음 접하는 취미를 발견했다면?","a":[["혼자 천천히 알아본다",0],["함께 배울 사람을 찾는다",1],["일단 신청부터 해 본다",2],["준비물과 후기를 조사한다",3]]},{"q":"친구와 약속 장소가 바뀌었다면?","a":[["새 장소의 분위기를 상상한다",0],["친구가 편한지 먼저 묻는다",1],["오히려 새로운 곳이라 신난다",2],["이동 경로와 시간을 확인한다",3]]},{"q":"비 오는 날 가장 끌리는 계획은?","a":[["책을 읽으며 빗소리를 듣는다",0],["좋아하는 사람과 수다를 떤다",1],["우산 들고 산책하러 나간다",2],["미뤄 둔 일을 끝낸다",3]]},{"q":"맛집 메뉴를 고르는 방법은?","a":[["메뉴판을 오래 살펴본다",0],["일행이 먹는 걸 따라 주문한다",1],["처음 보는 메뉴에 도전한다",2],["가장 평이 좋은 메뉴를 고른다",3]]},{"q":"뜻밖의 칭찬을 들었다면?","a":[["쑥스러워하며 마음에 담는다",0],["환하게 웃으며 칭찬을 돌려준다",1],["장난스럽게 받아친다",2],["어떤 점이 좋았는지 묻는다",3]]},{"q":"휴대폰 배경화면을 바꾼다면?","a":[["차분한 풍경 사진",0],["소중한 사람들과의 사진",1],["독특하고 유쾌한 이미지",2],["깔끔한 단색 또는 일정표",3]]},{"q":"긴 줄을 기다려야 한다면?","a":[["혼자 생각을 정리한다",0],["옆 사람과 이야기한다",1],["주변을 둘러보며 구경한다",2],["예상 대기 시간을 계산한다",3]]},{"q":"친구의 깜짝 생일을 준비한다면?","a":[["손편지를 정성껏 쓴다",0],["사람들을 모아 파티를 연다",1],["예상 못 한 이벤트를 기획한다",2],["장소와 예산을 꼼꼼히 챙긴다",3]]},{"q":"하루만 새로운 능력을 얻을 수 있다면?","a":[["사람의 마음을 깊이 이해하기",0],["누구와도 쉽게 친해지기",1],["어디든 순간이동하기",2],["무슨 일이든 완벽히 해결하기",3]]},{"q":"영화를 선택할 때 더 중요한 건?","a":[["오래 남는 여운",0],["함께 본 사람과의 대화",1],["예측할 수 없는 전개",2],["탄탄한 이야기와 평점",3]]},{"q":"길을 걷다 예쁜 골목을 발견했다면?","a":[["잠시 멈춰 풍경을 감상한다",0],["친구에게 사진을 보내준다",1],["그 길로 바로 들어가 본다",2],["지도에 장소를 저장한다",3]]},{"q":"해야 할 일이 갑자기 많아진다면?","a":[["우선 마음을 차분히 가라앉힌다",0],["도움받을 사람에게 이야기한다",1],["가장 재밌는 일부터 시작한다",2],["우선순위를 나눠 처리한다",3]]},{"q":"좋아하는 음악을 듣는 방식은?","a":[["가사와 분위기에 집중한다",0],["누군가와 플레이리스트를 공유한다",1],["새 장르를 계속 찾아본다",2],["기분별로 목록을 정리한다",3]]},{"q":"친구가 즉흥 여행을 제안했다면?","a":[["혼자 생각할 시간을 달라고 한다",0],["누가 같이 가는지부터 묻는다",1],["좋다며 가방부터 챙긴다",2],["일정과 비용부터 확인한다",3]]},{"q":"처음 만난 사람과 대화할 때는?","a":[["상대의 이야기를 자세히 듣는다",0],["공통점을 찾아 친해진다",1],["엉뚱한 질문으로 분위기를 푼다",2],["차근차근 질문하며 알아간다",3]]},{"q":"새로운 앱을 설치했다면?","a":[["조용히 기능을 하나씩 살핀다",0],["친구에게 추천할 만한지 본다",1],["이것저것 눌러 보며 탐험한다",2],["설정과 사용법부터 확인한다",3]]},{"q":"기념일 선물을 고른다면?","a":[["상대의 취향을 오래 생각한다",0],["함께한 추억이 담긴 걸 고른다",1],["깜짝 놀랄 선물을 고른다",2],["필요한 물건인지 확인한다",3]]},{"q":"갑자기 무대에 올라가야 한다면?","a":[["잠시 관객의 분위기를 살핀다",0],["관객에게 먼저 말을 건다",1],["즉흥적으로 즐겨 본다",2],["할 말을 머릿속에 정리한다",3]]},{"q":"서점에 들렀다. 가장 먼저 하는 일은?","a":[["조용한 코너를 천천히 둘러본다",0],["누군가에게 줄 책을 찾아본다",1],["표지가 끌리는 책을 펼친다",2],["찾던 책이 있는지 검색한다",3]]},{"q":"단체 여행에서 맡고 싶은 역할은?","a":[["모두가 쉬는 시간을 챙기는 사람",0],["분위기를 즐겁게 만드는 사람",1],["숨은 명소를 발견하는 사람",2],["일정을 책임지는 사람",3]]},{"q":"예상치 못한 문제가 생겼다면?","a":[["상황을 관찰하고 천천히 판단한다",0],["사람들과 의견을 나눈다",1],["일단 새로운 방법을 시도한다",2],["원인을 분석하고 해결한다",3]]},{"q":"하루를 마무리할 때 가장 좋은 순간은?","a":[["혼자 조용히 하루를 돌아볼 때",0],["소중한 사람과 안부를 나눌 때",1],["내일의 새로운 일을 상상할 때",2],["할 일을 끝내고 체크할 때",3]]}];const types=[['조용한 관찰자','작은 변화도 놓치지 않는 관찰자. 조용한 순간에 가장 많은 것을 발견해요. 팝업은 조금 덜 좋아할지도.'],['다정한 연결자','사람들과 함께할 때 에너지가 반짝이는 연결의 달인. 팝업마저 친구로 만들 기세예요.'],['즐거운 모험가','호기심이 이끄는 대로 움직이는 모험가. 뜻밖의 팝업도 당신에겐 또 하나의 이벤트!'],['치밀한 계획가','복잡한 상황에서도 질서를 찾는 전략가. 오늘의 팝업들은 당신의 계획에 없었겠지만요.']];const popupData=[{title:'우리 사이, 구독할까요?',body:'매주 당신을 위한 뉴스레터가 도착해요. 읽지 않아도 괜찮아요. 저희는 보내는 게 더 중요하거든요.',buttons:['좋아요, 보내주세요','조금 생각할게요']},{title:'잠깐! 선물이 있어요.',body:'지금 클릭하면 0% 할인 쿠폰을 드립니다. 이 놀라운 기회를 놓치지 마세요.',buttons:['쿠폰 받기','놀랍네요']},{title:'쿠키를 좋아하시나요?',body:'저희는 쿠키를 사용합니다. 초코칩은 없지만 당신의 클릭은 아주 맛있어요.',buttons:['모두 동의','필수만 허용']},{title:'이것도 좋아하실걸요?',body:'당신이 아직 끝내지 못한 테스트보다 더 흥미로운 콘텐츠를 추천해 드릴까요?',buttons:['추천 보기','테스트 계속하기']},{title:'결과가 거의 나왔어요!',body:'하지만 결과를 보기 전, 잠시 저희의 존재에 대해 생각해 주세요. 충분히 생각하셨나요?',buttons:['충분해요','아직이요']},{title:'당신의 결과를 저장하세요.',body:'나중에 다시 보려면 기억하면 됩니다. 아니면 스크린샷을 찍어도 좋아요. 꽤 혁신적이죠?',buttons:['기억할게요','알겠어요']},{title:'떠나시는 건 아니죠?',body:'방금 팝업을 닫으셨어요. 혹시 저희 사이에 무슨 문제라도 있었나요?',buttons:['아니요','조금요']},{title:'집중하고 계신가요?',body:'집중을 돕기 위한 알림입니다. 이 알림이 집중을 방해했다면 저희의 의도대로예요.',buttons:['집중 중','이제 아니에요']}];
-// In each ten ordinary popups, exactly six are persistent ads and four
-// use the original content. Each batch is shuffled to avoid a predictable pattern.
-const adData=[
- {title:'집중력 프리미엄+',body:'산만한 오늘을 위한 새로운 구독. 알림 없이 살 수 있는 평온함을 상상해 보세요.',graphic:'🧠',color:'#c7ff29',sticker:'NEW!',price:'첫 달 무료*',buttons:['혜택 확인하기','상품 더 알아보기']},
- {title:'오늘의 기분, 한 잔에.',body:'지금의 기분과 가장 어울리는 음료를 추천해 드려요. 추천을 거절하는 기능은 준비 중입니다.',graphic:'🧋',color:'#ffbaac',sticker:'BEST',price:'한정 기획',buttons:['추천 음료 보기','다른 맛 보기']},
- {title:'생각 정리용 플래너',body:'할 일을 정리할 시간도 없다면? 당신의 할 일에 이 광고 확인하기를 추가해 보세요.',graphic:'📓',color:'#c8baff',sticker:'-20%',price:'오늘만 특가',buttons:['플래너 살펴보기','색상 더 보기']},
- {title:'쉬어도 괜찮아요.',body:'3분 휴식 체험권을 드립니다. 아직 누르지 않으셨군요? 그렇다면 여기 더 머무르세요.',graphic:'🛋️',color:'#a8dbff',sticker:'LIMITED',price:'휴식 체험',buttons:['체험권 받기','휴식 자세히 보기']},
- {title:'행운 배송이 도착했어요!',body:'선택하지 않은 특별한 선물을 준비했습니다. 구성품은 비밀이고 광고는 공개입니다.',graphic:'🎁',color:'#ffd676',sticker:'GIFT',price:'깜짝 제안',buttons:['선물 확인하기','배송 혜택 보기']},
- {title:'자기계발 1일 패스',body:'당신의 새로운 모습을 위한 단 하루의 특별 제안. 시작은 작게, 팝업은 크게.',graphic:'✨',color:'#ffb9e9',sticker:'HOT',price:'얼리버드',buttons:['패스 구경하기','자세히 알아보기']}
-];
+
+/* Advertisement: a single self-contained poster image, without action buttons. */
+.popup.is-ad{width:min(448px,calc(100vw - 24px));background:#fffdf6}
+.popup.is-ad .popup-head{height:39px;background:#fffdf6}
+.popup.is-ad .popup-body{padding:12px}
+.ad-image{display:block;width:100%;height:auto;max-height:min(62vh,410px);object-fit:contain;border:1px solid var(--ink);background:#e9f7c7}
+/* The reject button behaves as though it becomes disabled as the pointer arrives. */
+.actions{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;gap:10px}
+.action-slot{min-width:0;display:flex}
+.actions .action-slot button{flex:1;min-height:48px;text-align:center;transition:background .16s,opacity .16s,filter .16s,transform .16s;white-space:normal;line-height:1.35}
+.action-slot.reject button{background:transparent;color:var(--ink)}
+.action-slot.reject.is-disabled button{opacity:.28;filter:grayscale(1);transform:scale(.97);cursor:not-allowed}
+.action-slot.reject.is-disabled{cursor:not-allowed}
+@media(max-width:650px){.popup.is-ad .popup-body{padding:8px}.actions{gap:6px}.actions .action-slot button{min-height:45px;padding:9px 7px;font-size:10px}}
+
+/* Final experience: a one-screen signal failure and two alternate endings. */
+.ending-layer{position:fixed;inset:0;z-index:100000;background:#070807;color:#f6f4ec;display:none;overflow:hidden;isolation:isolate}
+.ending-layer.visible{display:block}
+.ending-layer.signal{animation:signal-failure .65s steps(2,end) both}
+.ending-layer.signal::before{content:"";position:absolute;inset:0;z-index:10;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0px,transparent 3px,rgba(255,255,255,.15) 4px,transparent 6px),linear-gradient(90deg,rgba(199,255,41,.17),rgba(198,0,255,.13),rgba(255,255,255,.14));mix-blend-mode:screen;animation:signal-bars .1s infinite alternate}
+.ending-layer.signal::after{content:"";position:absolute;inset:0;z-index:11;background:repeating-linear-gradient(90deg,transparent 0px,transparent 55px,rgba(255,255,255,.22) 59px,transparent 63px);animation:signal-bars .16s infinite reverse}
+@keyframes signal-failure{0%,20%,50%,70%{transform:translate(0,0);filter:contrast(1)}10%,45%{transform:translate(-8px,2px);filter:invert(1)}30%,65%{transform:translate(11px,-5px);filter:hue-rotate(130deg)}100%{transform:none;filter:none}}
+@keyframes signal-bars{from{transform:translate(-5%,1%);opacity:.7}to{transform:translate(5%,-2%);opacity:.98}}
+.ending-text{position:absolute;left:50%;top:49%;transform:translate(-50%,-50%);width:min(920px,84vw);font-size:clamp(25px,4.2vw,64px);font-family:'DM Sans',sans-serif;font-weight:600;letter-spacing:-.055em;line-height:1.46;word-break:keep-all;white-space:pre-wrap}
+.ending-text .cursor{display:inline-block;width:.075em;height:.95em;background:var(--lime);margin-left:.1em;vertical-align:-.12em;animation:blink .8s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.ending-choice{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(515px,calc(100vw - 36px));background:var(--paper);color:var(--ink);border:2px solid var(--ink);box-shadow:12px 12px 0 var(--lime);opacity:0;animation:ending-enter .34s ease-out forwards}
+@keyframes ending-enter{from{opacity:0;translate:0 14px}to{opacity:1;translate:0 0}}
+.ending-choice-head{background:var(--lime);height:44px;border-bottom:2px solid var(--ink);display:flex;align-items:center;padding:0 18px;font:11px 'DM Mono',monospace}
+.ending-choice-content{padding:30px 28px 28px}
+.ending-choice h2{font:500 clamp(30px,4.5vw,49px)/1.23 'Playfair Display',Georgia,serif;letter-spacing:-.05em;margin:0 0 28px;word-break:keep-all}
+.ending-buttons{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ending-buttons button{border:1px solid var(--ink);background:var(--ink);color:var(--paper);padding:17px 10px;min-height:59px;font-weight:600;font-size:13px;transition:transform .15s,background .15s}
+.ending-buttons button:hover{transform:translateY(-3px)}
+.ending-buttons button:last-child{background:var(--paper);color:var(--ink)}
+.ending-flood{position:absolute;inset:0;overflow:hidden;background:#c7ff29}
+.ending-flood-card{color:#151515;position:absolute;border:2px solid #171717;background:#f6f4ec;box-shadow:6px 7px 0 rgba(0,0,0,.24);display:flex;flex-direction:column;min-width:155px;opacity:0;transform:translateY(18px) scale(.91);animation:flood-in .17s cubic-bezier(.2,.8,.2,1) forwards}
+.ending-flood-card:nth-child(3n){background:#c7ff29}.ending-flood-card:nth-child(5n){background:#fff}.ending-flood-card:nth-child(7n){background:#f3b1ee}
+.ending-flood-title{padding:7px 10px;border-bottom:1.5px solid #171717;font:10px 'DM Mono',monospace;display:flex;justify-content:space-between}
+.ending-flood-body{padding:18px 13px 22px;display:flex;align-items:center;font-weight:800;font-size:clamp(18px,2.2vw,30px);line-height:1.15;letter-spacing:-.045em;word-break:keep-all}
+@keyframes flood-in{to{opacity:1;transform:none}}
+@media(max-width:600px){.ending-choice-content{padding:25px 16px 20px}.ending-buttons{gap:7px}.ending-buttons button{font-size:11px;padding:12px 6px}.ending-text{font-size:clamp(24px,7vw,37px)}}
+
+.start.aligned{transform:translateX(-50%)}
+.start.aligned:hover{transform:translate(-50%,-4px)}
+</style></head><body><header><div class="brand">✳</div><nav><button id="homeNav">처음으로</button><button id="testNav">심리테스트 ↗</button><button id="aboutNav">테스트 안내</button></nav></header><main class="stage"><section class="view hero" id="home"><div class="eyebrow"><span>나의 성향 알아보기 / 2026</span><span>30개의 질문 · 나만의 결과</span></div><h1>It's all<br><em>about you.</em></h1><p class="sub">일상의 작은 선택으로 알아보는 나의 성향. 정답은 없으니 마음 가는 대로 골라보세요.</p><span class="pill p1">나만의 성향</span><span class="pill p2">오늘의 나를 발견해요</span><span class="pill p3">시작해 볼까요? ↗</span><span class="pill p4">나를 알아가는 시간</span><div class="dome"><div class="eyes"><div class="eye"><div class="pupil"></div></div><div class="eye"><div class="pupil"></div></div></div></div><button class="start" id="start">테스트 시작하기 ↗</button><span class="footer-note">당신은 어떤 유형일까요?</span></section><section class="view test hidden" id="test"><div class="test-top micro"><span>01 / 나의 유형 찾기</span><span id="count">질문 01 / 30</span></div><div id="questionArea"><h2 id="question"></h2><div class="choices" id="choices"></div><div class="progress"><div id="bar"></div></div></div><div id="resultArea" hidden><div class="micro">당신의 아주 공식적인 결과 ↗</div><h2 id="resultTitle"></h2><p class="result-description" id="resultText"></p><button class="restart" id="restart">처음부터 다시하기 ↗</button></div></section></main><div class="popup-layer" id="popupLayer"></div><div class="ending-layer" id="endingLayer" aria-live="polite"></div><script>
+const questions=[{"q":"갑자기 두 시간이 비었다. 당신의 선택은?","a":[["혼자만의 시간을 만끽한다",0],["친구에게 바로 연락한다",1],["새로운 장소로 나가본다",2],["일단 할 일 목록을 정리한다",3]]},{"q":"친구가 고민을 털어놓는다면?","a":[["조용히 끝까지 들어준다",0],["함께 감정을 나눈다",1],["색다른 해결책을 제안한다",2],["현실적인 계획을 세워준다",3]]},{"q":"마음에 드는 물건을 발견했다!","a":[["하루쯤 생각해 본다",0],["친구들의 의견을 묻는다",1],["끌리면 바로 구매한다",2],["가격과 리뷰를 비교한다",3]]},{"q":"처음 가는 파티에서 당신은?","a":[["구석에서 분위기를 관찰한다",0],["먼저 사람들에게 인사한다",1],["가장 재밌는 곳부터 찾아간다",2],["누가 왔는지 파악한다",3]]},{"q":"여행 계획을 세울 때 가장 중요한 것은?","a":[["느긋하게 쉴 시간",0],["함께할 사람들",1],["예상 못 한 모험",2],["정확한 일정표",3]]},{"q":"낯선 카페에 들어갔다. 어디에 앉을까?","a":[["창가의 조용한 구석",0],["사람들 사이의 큰 테이블",1],["그날 가장 끌리는 자리",2],["콘센트가 가까운 자리",3]]},{"q":"단체 채팅방에 메시지가 쏟아진다면?","a":[["필요한 대화만 조용히 읽는다",0],["재밌는 이야기에 바로 끼어든다",1],["갑자기 새로운 화제를 던진다",2],["대화를 정리해 공유한다",3]]},{"q":"주말 아침 눈을 뜬 순간 드는 생각은?","a":[["조용한 아침을 오래 누리고 싶다",0],["누구와 브런치를 먹을까?",1],["오늘 어디로 떠나볼까?",2],["오늘 할 일을 먼저 확인하자",3]]},{"q":"처음 접하는 취미를 발견했다면?","a":[["혼자 천천히 알아본다",0],["함께 배울 사람을 찾는다",1],["일단 신청부터 해 본다",2],["준비물과 후기를 조사한다",3]]},{"q":"친구와 약속 장소가 바뀌었다면?","a":[["새 장소의 분위기를 상상한다",0],["친구가 편한지 먼저 묻는다",1],["오히려 새로운 곳이라 신난다",2],["이동 경로와 시간을 확인한다",3]]},{"q":"비 오는 날 가장 끌리는 계획은?","a":[["책을 읽으며 빗소리를 듣는다",0],["좋아하는 사람과 수다를 떤다",1],["우산 들고 산책하러 나간다",2],["미뤄 둔 일을 끝낸다",3]]},{"q":"맛집 메뉴를 고르는 방법은?","a":[["메뉴판을 오래 살펴본다",0],["일행이 먹는 걸 따라 주문한다",1],["처음 보는 메뉴에 도전한다",2],["가장 평이 좋은 메뉴를 고른다",3]]},{"q":"뜻밖의 칭찬을 들었다면?","a":[["쑥스러워하며 마음에 담는다",0],["환하게 웃으며 칭찬을 돌려준다",1],["장난스럽게 받아친다",2],["어떤 점이 좋았는지 묻는다",3]]},{"q":"휴대폰 배경화면을 바꾼다면?","a":[["차분한 풍경 사진",0],["소중한 사람들과의 사진",1],["독특하고 유쾌한 이미지",2],["깔끔한 단색 또는 일정표",3]]},{"q":"긴 줄을 기다려야 한다면?","a":[["혼자 생각을 정리한다",0],["옆 사람과 이야기한다",1],["주변을 둘러보며 구경한다",2],["예상 대기 시간을 계산한다",3]]},{"q":"친구의 깜짝 생일을 준비한다면?","a":[["손편지를 정성껏 쓴다",0],["사람들을 모아 파티를 연다",1],["예상 못 한 이벤트를 기획한다",2],["장소와 예산을 꼼꼼히 챙긴다",3]]},{"q":"하루만 새로운 능력을 얻을 수 있다면?","a":[["사람의 마음을 깊이 이해하기",0],["누구와도 쉽게 친해지기",1],["어디든 순간이동하기",2],["무슨 일이든 완벽히 해결하기",3]]},{"q":"영화를 선택할 때 더 중요한 건?","a":[["오래 남는 여운",0],["함께 본 사람과의 대화",1],["예측할 수 없는 전개",2],["탄탄한 이야기와 평점",3]]},{"q":"길을 걷다 예쁜 골목을 발견했다면?","a":[["잠시 멈춰 풍경을 감상한다",0],["친구에게 사진을 보내준다",1],["그 길로 바로 들어가 본다",2],["지도에 장소를 저장한다",3]]},{"q":"해야 할 일이 갑자기 많아진다면?","a":[["우선 마음을 차분히 가라앉힌다",0],["도움받을 사람에게 이야기한다",1],["가장 재밌는 일부터 시작한다",2],["우선순위를 나눠 처리한다",3]]},{"q":"좋아하는 음악을 듣는 방식은?","a":[["가사와 분위기에 집중한다",0],["누군가와 플레이리스트를 공유한다",1],["새 장르를 계속 찾아본다",2],["기분별로 목록을 정리한다",3]]},{"q":"친구가 즉흥 여행을 제안했다면?","a":[["혼자 생각할 시간을 달라고 한다",0],["누가 같이 가는지부터 묻는다",1],["좋다며 가방부터 챙긴다",2],["일정과 비용부터 확인한다",3]]},{"q":"처음 만난 사람과 대화할 때는?","a":[["상대의 이야기를 자세히 듣는다",0],["공통점을 찾아 친해진다",1],["엉뚱한 질문으로 분위기를 푼다",2],["차근차근 질문하며 알아간다",3]]},{"q":"새로운 앱을 설치했다면?","a":[["조용히 기능을 하나씩 살핀다",0],["친구에게 추천할 만한지 본다",1],["이것저것 눌러 보며 탐험한다",2],["설정과 사용법부터 확인한다",3]]},{"q":"기념일 선물을 고른다면?","a":[["상대의 취향을 오래 생각한다",0],["함께한 추억이 담긴 걸 고른다",1],["깜짝 놀랄 선물을 고른다",2],["필요한 물건인지 확인한다",3]]},{"q":"갑자기 무대에 올라가야 한다면?","a":[["잠시 관객의 분위기를 살핀다",0],["관객에게 먼저 말을 건다",1],["즉흥적으로 즐겨 본다",2],["할 말을 머릿속에 정리한다",3]]},{"q":"서점에 들렀다. 가장 먼저 하는 일은?","a":[["조용한 코너를 천천히 둘러본다",0],["누군가에게 줄 책을 찾아본다",1],["표지가 끌리는 책을 펼친다",2],["찾던 책이 있는지 검색한다",3]]},{"q":"단체 여행에서 맡고 싶은 역할은?","a":[["모두가 쉬는 시간을 챙기는 사람",0],["분위기를 즐겁게 만드는 사람",1],["숨은 명소를 발견하는 사람",2],["일정을 책임지는 사람",3]]},{"q":"예상치 못한 문제가 생겼다면?","a":[["상황을 관찰하고 천천히 판단한다",0],["사람들과 의견을 나눈다",1],["일단 새로운 방법을 시도한다",2],["원인을 분석하고 해결한다",3]]},{"q":"하루를 마무리할 때 가장 좋은 순간은?","a":[["혼자 조용히 하루를 돌아볼 때",0],["소중한 사람과 안부를 나눌 때",1],["내일의 새로운 일을 상상할 때",2],["할 일을 끝내고 체크할 때",3]]}];const types=[['조용한 관찰자','작은 변화도 놓치지 않는 관찰자. 조용한 순간에 가장 많은 것을 발견해요. 팝업은 조금 덜 좋아할지도.'],['다정한 연결자','사람들과 함께할 때 에너지가 반짝이는 연결의 달인. 팝업마저 친구로 만들 기세예요.'],['즐거운 모험가','호기심이 이끄는 대로 움직이는 모험가. 뜻밖의 팝업도 당신에겐 또 하나의 이벤트!'],['치밀한 계획가','복잡한 상황에서도 질서를 찾는 전략가. 오늘의 팝업들은 당신의 계획에 없었겠지만요.']];const popupData=[{"title":"업그레이드 버전이 있어요","body":"조금 더 자세한 성향 분석이 준비되어 있어요. 관련 내용을 확인하시겠어요?","buttons":["네, 자세히 볼래요","아니요, 테스트만 할래요"],"rejectIndex":1},{"title":"분석 기능이 추가되었어요","body":"선택하신 답변을 더 깊게 살펴볼 수 있어요. 다음 안내도 확인해 보실래요?","buttons":["네, 확인할게요","좋아요, 보여주세요"],"rejectIndex":null},{"title":"우리 사이, 구독할까요?","body":"매주 당신을 위한 뉴스레터가 도착해요. 읽지 않아도 괜찮아요. 저희는 보내는 게 더 중요하거든요.","buttons":["네, 구독할게요","아니요, 괜찮아요"],"rejectIndex":1},{"title":"쿠키를 좋아하시나요?","body":"저희는 쿠키를 사용합니다. 초코칩은 없지만 당신의 클릭은 아주 맛있어요.","buttons":["모두 동의할게요","네, 좋아요"],"rejectIndex":null},{"title":"추천드릴 내용이 있어요","body":"조금 전에 고른 선택지와 관련된 콘텐츠를 준비했어요. 궁금하지 않으신가요?","buttons":["네, 볼래요","아니요, 건너뛸래요"],"rejectIndex":1},{"title":"새로운 기능을 소개합니다","body":"정리된 성향 리포트를 만나보세요. 상세한 설명은 다음 창에서 이어집니다.","buttons":["네, 이어서 볼게요","궁금해요"],"rejectIndex":null},{"title":"한 번만 더 확인할게요","body":"꼭 맞는 혜택이 있는지 확인하는 중이에요. 아마도 그렇겠죠?","buttons":["네, 확인해 주세요","아니요, 지금은 됐어요"],"rejectIndex":1},{"title":"당신에게 맞는 콘텐츠","body":"당신의 답변을 기반으로 특별한 추천을 준비했어요. 이번에도 관심 가져주실 거죠?","buttons":["네, 추천받을게요","좋아요, 볼래요"],"rejectIndex":null},{"title":"더 자세히 알고 싶나요?","body":"성향에 대한 작은 힌트를 더 보여드릴까요? 정말 작은 힌트라 다음 창에 담겨 있어요.","buttons":["네, 알려주세요","아니요, 됐어요"],"rejectIndex":1},{"title":"잠깐! 선물이 있어요.","body":"오늘 확인할 수 있는 특별한 혜택입니다. 확인 버튼을 누르면 관련 안내로 넘어갑니다.","buttons":["네, 받을게요","보여주세요"],"rejectIndex":null}];
+const adData=[{"src":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MjAgNDkwIiB3aWR0aD0iNTIwIiBoZWlnaHQ9IjQ5MCI+CjxyZWN0IHdpZHRoPSI1MjAiIGhlaWdodD0iNDkwIiBmaWxsPSIjZDBmZjNjIi8+CjxyZWN0IHg9IjE3IiB5PSIxNyIgd2lkdGg9IjQ4NiIgaGVpZ2h0PSI0NTYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzExMTExMSIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjx0ZXh0IHg9IjMzIiB5PSI1MyIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSIzIj5GT0NVUys8L3RleHQ+PHRleHQgeD0iNDgxIiB5PSI1MyIgdGV4dC1hbmNob3I9ImVuZCIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUiPiMwMTwvdGV4dD4KPHBhdGggZD0iTTMyIDczaDQ1NSIgc3Ryb2tlPSIjMTExMTExIiBzdHJva2Utd2lkdGg9IjIiLz4KPGNpcmNsZSBjeD0iMzQwIiBjeT0iMjc4IiByPSIxNTgiIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iLjI3IiBzdHJva2U9IiMxMTExMTEiIHN0cm9rZS13aWR0aD0iMiIvPgo8cmVjdCB4PSIyNTAiIHk9IjE2MCIgd2lkdGg9IjE1NSIgaGVpZ2h0PSIyNDUiIHJ4PSIyNSIgZmlsbD0iIzE0MTQxNCIgdHJhbnNmb3JtPSJyb3RhdGUoMTIgMzI4IDI4MCkiLz48cmVjdCB4PSIyNjUiIHk9IjE4MCIgd2lkdGg9IjEyMCIgaGVpZ2h0PSIyMDUiIHJ4PSIxNCIgZmlsbD0iI2Y4ZjVlOSIgdHJhbnNmb3JtPSJyb3RhdGUoMTIgMzI4IDI4MCkiLz48Y2lyY2xlIGN4PSIzMTUiIGN5PSIyNzAiIHI9IjUwIiBmaWxsPSIjZDBmZjNjIiBzdHJva2U9IiMxMTEiIHN0cm9rZS13aWR0aD0iMyIvPjxjaXJjbGUgY3g9IjMxNSIgY3k9IjI3MCIgcj0iMTciIGZpbGw9IiMxMTEiLz48cGF0aCBkPSJNMjE2IDMyNWwzNSAtMzVNMzkyIDEzMWw0NSAtMjciIHN0cm9rZT0iIzExMSIgc3Ryb2tlLXdpZHRoPSI3Ii8+CjxyZWN0IHg9IjIzIiB5PSIzNjYiIHdpZHRoPSI0NzQiIGhlaWdodD0iMTA2IiBmaWxsPSIjZDBmZjNjIi8+Cjx0ZXh0IHg9IjM1IiB5PSI0MTQiIGZvbnQtZmFtaWx5PSJBcmlhbCwnQXBwbGUgU0QgR290aGljIE5lbycsJ01hbGd1biBHb3RoaWMnLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI4MDAiIGZvbnQtc2l6ZT0iMzQiIGZpbGw9IiMxMTExMTEiPuynkeykkeydtCDtlYTsmpTtlZwg7Jik64qYPC90ZXh0Pgo8dGV4dCB4PSIzNSIgeT0iNDQ3IiBmb250LWZhbWlseT0iQXJpYWwsJ0FwcGxlIFNEIEdvdGhpYyBOZW8nLCdNYWxndW4gR290aGljJyxzYW5zLXNlcmlmIiBmb250LXNpemU9IjE3IiBmaWxsPSIjMTExMTExIj7sp5HspJHroKUg6rWs64+FIOyEnOu5hOyKpDwvdGV4dD4KPHRleHQgeD0iNDg0IiB5PSI0NDkiIHRleHQtYW5jaG9yPSJlbmQiIGZvbnQtZmFtaWx5PSJBcmlhbCxzYW5zLXNlcmlmIiBmb250LXNpemU9IjI0Ij7ihpc8L3RleHQ+Cjwvc3ZnPg==","alt":"광고 이미지: 집중이 필요한 오늘"},{"src":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MjAgNDkwIiB3aWR0aD0iNTIwIiBoZWlnaHQ9IjQ5MCI+CjxyZWN0IHdpZHRoPSI1MjAiIGhlaWdodD0iNDkwIiBmaWxsPSIjZmZiNTllIi8+CjxyZWN0IHg9IjE3IiB5PSIxNyIgd2lkdGg9IjQ4NiIgaGVpZ2h0PSI0NTYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzE1MTUxNSIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjx0ZXh0IHg9IjMzIiB5PSI1MyIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSIzIj5NT09EIFNJUDwvdGV4dD48dGV4dCB4PSI0ODEiIHk9IjUzIiB0ZXh0LWFuY2hvcj0iZW5kIiBmb250LWZhbWlseT0iQXJpYWwsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNSI+IzAyPC90ZXh0Pgo8cGF0aCBkPSJNMzIgNzNoNDU1IiBzdHJva2U9IiMxNTE1MTUiIHN0cm9rZS13aWR0aD0iMiIvPgo8Y2lyY2xlIGN4PSIzNDAiIGN5PSIyNzgiIHI9IjE1OCIgZmlsbD0iI2ZmZmZmZiIgZmlsbC1vcGFjaXR5PSIuMjciIHN0cm9rZT0iIzE1MTUxNSIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxwYXRoIGQ9Ik0yNTIgMTk0aDE2OGwtMjggMjA1SDI4MnoiIGZpbGw9IiNmZmY0ZTIiIHN0cm9rZT0iIzExMSIgc3Ryb2tlLXdpZHRoPSI0Ii8+PGVsbGlwc2UgY3g9IjMzNyIgY3k9IjE5NSIgcng9Ijg1IiByeT0iMTkiIGZpbGw9IiNmZWZhZDgiIHN0cm9rZT0iIzExMSIgc3Ryb2tlLXdpZHRoPSI0Ii8+PHBhdGggZD0iTTM0MCAxOTRsNDUgLTkwIiBzdHJva2U9IiMxMTEiIHN0cm9rZS13aWR0aD0iMTIiLz48Y2lyY2xlIGN4PSIzMDMiIGN5PSIzMTUiIHI9IjIyIiBmaWxsPSIjMTExIi8+PGNpcmNsZSBjeD0iMzQ1IiBjeT0iMzMxIiByPSIyMiIgZmlsbD0iIzExMSIvPjxjaXJjbGUgY3g9IjM4MCIgY3k9IjI5MyIgcj0iMjIiIGZpbGw9IiMxMTEiLz4KPHJlY3QgeD0iMjMiIHk9IjM2NiIgd2lkdGg9IjQ3NCIgaGVpZ2h0PSIxMDYiIGZpbGw9IiNmZmI1OWUiLz4KPHRleHQgeD0iMzUiIHk9IjQxNCIgZm9udC1mYW1pbHk9IkFyaWFsLCdBcHBsZSBTRCBHb3RoaWMgTmVvJywnTWFsZ3VuIEdvdGhpYycsc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjgwMCIgZm9udC1zaXplPSIzNCIgZmlsbD0iIzE1MTUxNSI+7KeA6riIIOq4sOu2hOyXkCDtlZwg66qo6riIPC90ZXh0Pgo8dGV4dCB4PSIzNSIgeT0iNDQ3IiBmb250LWZhbWlseT0iQXJpYWwsJ0FwcGxlIFNEIEdvdGhpYyBOZW8nLCdNYWxndW4gR290aGljJyxzYW5zLXNlcmlmIiBmb250LXNpemU9IjE3IiBmaWxsPSIjMTUxNTE1Ij7smKTripjrp4zsnZgg7Iqk7Y6Y7IWcIOuTnOunge2BrDwvdGV4dD4KPHRleHQgeD0iNDg0IiB5PSI0NDkiIHRleHQtYW5jaG9yPSJlbmQiIGZvbnQtZmFtaWx5PSJBcmlhbCxzYW5zLXNlcmlmIiBmb250LXNpemU9IjI0Ij7ihpc8L3RleHQ+Cjwvc3ZnPg==","alt":"광고 이미지: 지금 기분에 한 모금"},{"src":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MjAgNDkwIiB3aWR0aD0iNTIwIiBoZWlnaHQ9IjQ5MCI+CjxyZWN0IHdpZHRoPSI1MjAiIGhlaWdodD0iNDkwIiBmaWxsPSIjZDBiN2ZmIi8+CjxyZWN0IHg9IjE3IiB5PSIxNyIgd2lkdGg9IjQ4NiIgaGVpZ2h0PSI0NTYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzE5MTkxOSIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjx0ZXh0IHg9IjMzIiB5PSI1MyIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSIzIj5HT09EIFBMQU48L3RleHQ+PHRleHQgeD0iNDgxIiB5PSI1MyIgdGV4dC1hbmNob3I9ImVuZCIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUiPiMwMzwvdGV4dD4KPHBhdGggZD0iTTMyIDczaDQ1NSIgc3Ryb2tlPSIjMTkxOTE5IiBzdHJva2Utd2lkdGg9IjIiLz4KPGNpcmNsZSBjeD0iMzQwIiBjeT0iMjc4IiByPSIxNTgiIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iLjI3IiBzdHJva2U9IiMxOTE5MTkiIHN0cm9rZS13aWR0aD0iMiIvPgo8cmVjdCB4PSIyNDUiIHk9IjE0NCIgd2lkdGg9IjE4MSIgaGVpZ2h0PSIyNjkiIHJ4PSI3IiBmaWxsPSIjMTYxNjE2IiB0cmFuc2Zvcm09InJvdGF0ZSgtOSAzNDAgMjc1KSIvPjxyZWN0IHg9IjI1NyIgeT0iMTUxIiB3aWR0aD0iMTcxIiBoZWlnaHQ9IjI1MSIgcng9IjUiIGZpbGw9IiNmZGZiZTciIHRyYW5zZm9ybT0icm90YXRlKC05IDM0MCAyNzUpIi8+PHBhdGggZD0iTTI5NCAyMzZoOTZNMjk0IDI3MWg5Nk0yOTQgMzA2aDk2TTI5NCAzNDFoNzYiIHN0cm9rZT0iIzExMSIgc3Ryb2tlLXdpZHRoPSI0Ii8+PGNpcmNsZSBjeD0iMjgwIiBjeT0iMjM2IiByPSI2IiBmaWxsPSIjYzdmZjI5Ii8+PGNpcmNsZSBjeD0iMjgwIiBjeT0iMjcxIiByPSI2IiBmaWxsPSIjYzdmZjI5Ii8+CjxyZWN0IHg9IjIzIiB5PSIzNjYiIHdpZHRoPSI0NzQiIGhlaWdodD0iMTA2IiBmaWxsPSIjZDBiN2ZmIi8+Cjx0ZXh0IHg9IjM1IiB5PSI0MTQiIGZvbnQtZmFtaWx5PSJBcmlhbCwnQXBwbGUgU0QgR290aGljIE5lbycsJ01hbGd1biBHb3RoaWMnLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI4MDAiIGZvbnQtc2l6ZT0iMzQiIGZpbGw9IiMxOTE5MTkiPuqzhO2ajeydhCDshLjsm4zrs7zquYzsmpQ/PC90ZXh0Pgo8dGV4dCB4PSIzNSIgeT0iNDQ3IiBmb250LWZhbWlseT0iQXJpYWwsJ0FwcGxlIFNEIEdvdGhpYyBOZW8nLCdNYWxndW4gR290aGljJyxzYW5zLXNlcmlmIiBmb250LXNpemU9IjE3IiBmaWxsPSIjMTkxOTE5Ij7rp6Tsnbwg7JOw64qUIOyekeydgCDtlIzrnpjrhIg8L3RleHQ+Cjx0ZXh0IHg9IjQ4NCIgeT0iNDQ5IiB0ZXh0LWFuY2hvcj0iZW5kIiBmb250LWZhbWlseT0iQXJpYWwsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCI+4oaXPC90ZXh0Pgo8L3N2Zz4=","alt":"광고 이미지: 계획을 세워볼까요?"},{"src":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MjAgNDkwIiB3aWR0aD0iNTIwIiBoZWlnaHQ9IjQ5MCI+CjxyZWN0IHdpZHRoPSI1MjAiIGhlaWdodD0iNDkwIiBmaWxsPSIjOTNkNWY4Ii8+CjxyZWN0IHg9IjE3IiB5PSIxNyIgd2lkdGg9IjQ4NiIgaGVpZ2h0PSI0NTYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzEyMTIxMiIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjx0ZXh0IHg9IjMzIiB5PSI1MyIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSIzIj5TTE9XIENMVUI8L3RleHQ+PHRleHQgeD0iNDgxIiB5PSI1MyIgdGV4dC1hbmNob3I9ImVuZCIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUiPiMwNDwvdGV4dD4KPHBhdGggZD0iTTMyIDczaDQ1NSIgc3Ryb2tlPSIjMTIxMjEyIiBzdHJva2Utd2lkdGg9IjIiLz4KPGNpcmNsZSBjeD0iMzQwIiBjeT0iMjc4IiByPSIxNTgiIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iLjI3IiBzdHJva2U9IiMxMjEyMTIiIHN0cm9rZS13aWR0aD0iMiIvPgo8cmVjdCB4PSIyNjAiIHk9IjI1NiIgd2lkdGg9IjE2MiIgaGVpZ2h0PSIxMDYiIHJ4PSIyNSIgZmlsbD0iI2YzZWNkZiIgc3Ryb2tlPSIjMTExIiBzdHJva2Utd2lkdGg9IjQiLz48cGF0aCBkPSJNMjc0IDI1NnYtNTdxMC0zOCAzOC0zOGg3MXEzNiAwIDM2IDM4djU3IiBmaWxsPSIjZjRmMWQ5IiBzdHJva2U9IiMxMTEiIHN0cm9rZS13aWR0aD0iNCIvPjxwYXRoIGQ9Ik0yNzkgMzYydjM0TTM5OCAzNjJ2MzQiIHN0cm9rZT0iIzExMSIgc3Ryb2tlLXdpZHRoPSIxMyIvPjxjaXJjbGUgY3g9IjMyNSIgY3k9IjIyNSIgcj0iMTgiIGZpbGw9IiNjN2ZmMjkiIHN0cm9rZT0iIzExMSIgc3Ryb2tlLXdpZHRoPSIzIi8+CjxyZWN0IHg9IjIzIiB5PSIzNjYiIHdpZHRoPSI0NzQiIGhlaWdodD0iMTA2IiBmaWxsPSIjOTNkNWY4Ii8+Cjx0ZXh0IHg9IjM1IiB5PSI0MTQiIGZvbnQtZmFtaWx5PSJBcmlhbCwnQXBwbGUgU0QgR290aGljIE5lbycsJ01hbGd1biBHb3RoaWMnLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI4MDAiIGZvbnQtc2l6ZT0iMzQiIGZpbGw9IiMxMjEyMTIiPuyemCDsiazripQg6rKD64+EIOuKpeugpTwvdGV4dD4KPHRleHQgeD0iMzUiIHk9IjQ0NyIgZm9udC1mYW1pbHk9IkFyaWFsLCdBcHBsZSBTRCBHb3RoaWMgTmVvJywnTWFsZ3VuIEdvdGhpYycsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNyIgZmlsbD0iIzEyMTIxMiI+7Zy07IudIOyytO2XmCDrqaTrsoTsi608L3RleHQ+Cjx0ZXh0IHg9IjQ4NCIgeT0iNDQ5IiB0ZXh0LWFuY2hvcj0iZW5kIiBmb250LWZhbWlseT0iQXJpYWwsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCI+4oaXPC90ZXh0Pgo8L3N2Zz4=","alt":"광고 이미지: 잘 쉬는 것도 능력"},{"src":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MjAgNDkwIiB3aWR0aD0iNTIwIiBoZWlnaHQ9IjQ5MCI+CjxyZWN0IHdpZHRoPSI1MjAiIGhlaWdodD0iNDkwIiBmaWxsPSIjZmZkMzZkIi8+CjxyZWN0IHg9IjE3IiB5PSIxNyIgd2lkdGg9IjQ4NiIgaGVpZ2h0PSI0NTYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzExMTExMSIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjx0ZXh0IHg9IjMzIiB5PSI1MyIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSIzIj5TVVJQUklTRSE8L3RleHQ+PHRleHQgeD0iNDgxIiB5PSI1MyIgdGV4dC1hbmNob3I9ImVuZCIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUiPiMwNTwvdGV4dD4KPHBhdGggZD0iTTMyIDczaDQ1NSIgc3Ryb2tlPSIjMTExMTExIiBzdHJva2Utd2lkdGg9IjIiLz4KPGNpcmNsZSBjeD0iMzQwIiBjeT0iMjc4IiByPSIxNTgiIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iLjI3IiBzdHJva2U9IiMxMTExMTEiIHN0cm9rZS13aWR0aD0iMiIvPgo8cmVjdCB4PSIyNTUiIHk9IjIyMiIgd2lkdGg9IjE3MCIgaGVpZ2h0PSIxNTYiIGZpbGw9IiNmM2EwYzkiIHN0cm9rZT0iIzExMSIgc3Ryb2tlLXdpZHRoPSI0Ii8+PHJlY3QgeD0iMjQyIiB5PSIyMDQiIHdpZHRoPSIxOTQiIGhlaWdodD0iNDMiIGZpbGw9IiNmZmViYmUiIHN0cm9rZT0iIzExMSIgc3Ryb2tlLXdpZHRoPSI0Ii8+PHJlY3QgeD0iMzIxIiB5PSIyMDQiIHdpZHRoPSIzNCIgaGVpZ2h0PSIxNzQiIGZpbGw9IiNjN2ZmMjkiIHN0cm9rZT0iIzExMSIgc3Ryb2tlLXdpZHRoPSI0Ii8+PHBhdGggZD0iTTMzNyAyMDRRMjQwIDE3MCAyNzUgMTQ1UTMwMyAxMjQgMzM3IDIwNE0zMzcgMjA0UTQzNiAxNzAgNDA1IDE0NFEzNzQgMTIzIDMzNyAyMDQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzExMSIgc3Ryb2tlLXdpZHRoPSI4Ii8+CjxyZWN0IHg9IjIzIiB5PSIzNjYiIHdpZHRoPSI0NzQiIGhlaWdodD0iMTA2IiBmaWxsPSIjZmZkMzZkIi8+Cjx0ZXh0IHg9IjM1IiB5PSI0MTQiIGZvbnQtZmFtaWx5PSJBcmlhbCwnQXBwbGUgU0QgR290aGljIE5lbycsJ01hbGd1biBHb3RoaWMnLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI4MDAiIGZvbnQtc2l6ZT0iMzQiIGZpbGw9IiMxMTExMTEiPuyYpOuKmOunjOydmCDshKDrrLw8L3RleHQ+Cjx0ZXh0IHg9IjM1IiB5PSI0NDciIGZvbnQtZmFtaWx5PSJBcmlhbCwnQXBwbGUgU0QgR290aGljIE5lbycsJ01hbGd1biBHb3RoaWMnLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTciIGZpbGw9IiMxMTExMTEiPuyXtOyWtOuztOq4sCDsoITquYzsp4Ag67mE67CAPC90ZXh0Pgo8dGV4dCB4PSI0ODQiIHk9IjQ0OSIgdGV4dC1hbmNob3I9ImVuZCIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiPuKGlzwvdGV4dD4KPC9zdmc+","alt":"광고 이미지: 오늘만의 선물"},{"src":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MjAgNDkwIiB3aWR0aD0iNTIwIiBoZWlnaHQ9IjQ5MCI+CjxyZWN0IHdpZHRoPSI1MjAiIGhlaWdodD0iNDkwIiBmaWxsPSIjZjViMmUyIi8+CjxyZWN0IHg9IjE3IiB5PSIxNyIgd2lkdGg9IjQ4NiIgaGVpZ2h0PSI0NTYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzEyMTIxMiIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjx0ZXh0IHg9IjMzIiB5PSI1MyIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSIzIj5ORVhUIExFVkVMPC90ZXh0Pjx0ZXh0IHg9IjQ4MSIgeT0iNTMiIHRleHQtYW5jaG9yPSJlbmQiIGZvbnQtZmFtaWx5PSJBcmlhbCxzYW5zLXNlcmlmIiBmb250LXNpemU9IjE1Ij4jMDY8L3RleHQ+CjxwYXRoIGQ9Ik0zMiA3M2g0NTUiIHN0cm9rZT0iIzEyMTIxMiIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxjaXJjbGUgY3g9IjM0MCIgY3k9IjI3OCIgcj0iMTU4IiBmaWxsPSIjZmZmZmZmIiBmaWxsLW9wYWNpdHk9Ii4yNyIgc3Ryb2tlPSIjMTIxMjEyIiBzdHJva2Utd2lkdGg9IjIiLz4KPGNpcmNsZSBjeD0iMzQyIiBjeT0iMjc0IiByPSIxMTMiIGZpbGw9IiNjN2ZmMjkiIHN0cm9rZT0iIzExMSIgc3Ryb2tlLXdpZHRoPSI1Ii8+PHBhdGggZD0iTTM0MiAxODV2MTY2TTI1OSAyNjhoMTY2IiBzdHJva2U9IiMxMTEiIHN0cm9rZS13aWR0aD0iOCIvPjxwYXRoIGQ9Ik0zMDEgMjI2bDgwIDgwTTM4MyAyMjRsLTgwIDgwIiBzdHJva2U9IiMxMTEiIHN0cm9rZS13aWR0aD0iNSIvPjxjaXJjbGUgY3g9IjM0MiIgY3k9IjI3NCIgcj0iMTkiIGZpbGw9IiMxMTEiLz4KPHJlY3QgeD0iMjMiIHk9IjM2NiIgd2lkdGg9IjQ3NCIgaGVpZ2h0PSIxMDYiIGZpbGw9IiNmNWIyZTIiLz4KPHRleHQgeD0iMzUiIHk9IjQxNCIgZm9udC1mYW1pbHk9IkFyaWFsLCdBcHBsZSBTRCBHb3RoaWMgTmVvJywnTWFsZ3VuIEdvdGhpYycsc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjgwMCIgZm9udC1zaXplPSIzNCIgZmlsbD0iIzEyMTIxMiI+7IOI66Gc7Jq0IOuCmOydmCDsi5zsnpE8L3RleHQ+Cjx0ZXh0IHg9IjM1IiB5PSI0NDciIGZvbnQtZmFtaWx5PSJBcmlhbCwnQXBwbGUgU0QgR290aGljIE5lbycsJ01hbGd1biBHb3RoaWMnLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTciIGZpbGw9IiMxMjEyMTIiPu2VmOujqCDtlZwg7J6lIOuzgO2ZlOydmCDquLDroZ08L3RleHQ+Cjx0ZXh0IHg9IjQ4NCIgeT0iNDQ5IiB0ZXh0LWFuY2hvcj0iZW5kIiBmb250LWZhbWlseT0iQXJpYWwsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCI+4oaXPC90ZXh0Pgo8L3N2Zz4=","alt":"광고 이미지: 새로운 나의 시작"}];
+// Automatic arrivals use a shuffled 30% ads / 70% ordinary popups cycle.
 let mixBag=[];
-function nextPopupKind(){if(!mixBag.length){mixBag=[...Array(3).fill('ad'),...Array(7).fill('regular')];for(let i=mixBag.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[mixBag[i],mixBag[j]]=[mixBag[j],mixBag[i]]}}return mixBag.pop()}
+function nextPopupKind(){
+  if(!mixBag.length){
+    mixBag=[...Array(3).fill('ad'),...Array(7).fill('regular')];
+    for(let i=mixBag.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[mixBag[i],mixBag[j]]=[mixBag[j],mixBag[i]]}
+  }
+  return mixBag.pop();
+}
 let adCursor=0;
-let index=0,scores=[0,0,0,0],total=0,sequence=0,active=[],started=false,spawnTimer=null,mouse={x:-999,y:-999};const layer=document.getElementById('popupLayer');const $=id=>document.getElementById(id);const modes=['run','shrink','orbit','fake','jitter','decoy'];let modeBag=[];function nextMode(){if(!modeBag.length){modeBag=[...modes];for(let i=modeBag.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[modeBag[i],modeBag[j]]=[modeBag[j],modeBag[i]]}}return modeBag.pop()}let adsUnlocked=false;let gateShown=false;let popupPending=false;function syncPopupLock(){const locked=active.length>0;layer.classList.toggle('is-blocking',locked);$('test').inert=locked}function show(id){['home','test'].forEach(k=>$(k).classList.toggle('hidden',k!==id))}function start(){started=true;show('test');clearInterval(spawnTimer);spawnTimer=setInterval(()=>{if(started&&adsUnlocked&&active.length<5)spawn()},6500)}$('start').onclick=start;$('testNav').onclick=()=>{if(!started)start();else show('test')};$('homeNav').onclick=()=>show('home');$('aboutNav').onclick=()=>{toast('30개의 질문에 답하고 나만의 성격 유형을 알아보세요.');};
-function render(){ $('count').textContent=`질문 ${String(index+1).padStart(2,'0')} / 30`;$('question').textContent=questions[index].q;$('choices').replaceChildren();questions[index].a.forEach(([label,score],i)=>{let b=document.createElement('button');b.className='choice';b.innerHTML=`<span>${label}</span><b>0${i+1} ↗</b>`;b.onclick=()=>answer(score);$('choices').append(b)});$('bar').style.width=`${index/30*100}%`;syncPopupLock()}
-function answer(score){if(active.length)return;scores[score]++;index++;if(index===4&&!gateShown){gateShown=true;adsUnlocked=true;setTimeout(()=>{spawn('gate')},1100)}if(index===30){$('questionArea').hidden=true;$('resultArea').hidden=false;let win=scores.indexOf(Math.max(...scores));$('resultTitle').textContent=types[win][0];$('resultText').textContent=types[win][1];$('count').textContent='완료 / 30';setTimeout(()=>spawn(4),350);setTimeout(()=>spawn(5),1150)}else{render();if(adsUnlocked&&index>4)setTimeout(()=>spawn(),1100)}}
-function toast(msg){let t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.append(t);setTimeout(()=>t.remove(),2300)}function dismiss(el,reset=false){if(!el.isConnected||el.dataset.persistent==='true'&&!reset)return;el._stop=true;el._close.remove();el.remove();active=active.filter(a=>a!==el);syncPopupLock()}
-function spawn(forced){
-  // Persistent ads are never deleted by overflow management. Stop spawning
-  // instead of silently removing a supposedly unremovable advert.
-  if(active.length>=5)return null;
-  const isGate=forced==='gate';
-  const isAd=forced==='ad'||(!isGate&&typeof forced!=='number'&&nextPopupKind()==='ad');
-  const data=isGate?{
-    title:'잠깐, 선택의 시간!',
-    body:'테스트를 계속하시겠어요? 아니면 특별 업그레이드 광고를 먼저 확인하시겠어요?',
-    buttons:['업그레이드 광고 보기','광고 없이 테스트 계속하기']
-  }:isAd?adData[(adCursor++)%adData.length]:popupData[typeof forced==='number'?forced:sequence%popupData.length];
-  const mode=nextMode();sequence++;total++;
+
+let index=0,scores=[0,0,0,0],total=0,sequence=0,active=[],started=false;
+let spawnTimer=null,adLaunchTimer=null,firstPopupTimer=null;
+let introStep=0,adsUnlocked=false,mouse={x:-999,y:-999};
+let endingStarted=false,endingTimers=[];
+// The finale is driven by the scripted popup sequence, never by click counts.
+let finalePhase='idle',finaleTimers=[],approvalReceived=false,acceptOnlyShown=0;
+const endingLayer=document.getElementById('endingLayer');
+function endingDelay(callback,ms){endingTimers.push(setTimeout(callback,ms));}
+function stopNormalPopups(){
+  clearTimeout(spawnTimer);clearTimeout(adLaunchTimer);clearTimeout(firstPopupTimer);
+  spawnTimer=null;adLaunchTimer=null;firstPopupTimer=null;
+  active.forEach(el=>{el._stop=true;el._close?.remove()});
+  active=[];layer.replaceChildren();syncPopupLock();
+}
+function beginEnding(){
+  if(endingStarted)return;
+  endingStarted=true;started=false;
+  stopFinaleTimers();stopNormalPopups();
+  endingLayer.className='ending-layer visible signal';
+  endingLayer.replaceChildren();
+  // A brief broken-signal moment cuts abruptly to black.
+  endingDelay(()=>{endingLayer.className='ending-layer visible';typeEndingMessage()},850);
+}
+function typeEndingMessage(){
+  const line=document.createElement('div');line.className='ending-text';
+  const text=document.createElement('span'),cursor=document.createElement('span');
+  cursor.className='cursor';cursor.setAttribute('aria-hidden','true');
+  line.append(text,cursor);endingLayer.append(line);
+  const message='팝업 광고 때문에 짜증 나셨던 적, 다들 있으시죠?\n네. 저희도 알고 있습니다.';
+  let i=0;
+  const write=()=>{
+    if(i<message.length){
+      text.textContent+=message[i++];
+      endingDelay(write,message[i-1]==='\n'?320:57);
+    }else{endingDelay(()=>{endingLayer.replaceChildren();endingDelay(showLastOffer,950)},1650)}
+  };
+  endingDelay(write,350);
+}
+function showLastOffer(){
+  endingLayer.innerHTML=`<section class="ending-choice" role="dialog" aria-modal="true" aria-label="마지막 안내"><div class="ending-choice-head"><span>새로운 알림</span></div><div class="ending-choice-content"><h2>그런데 하나만 더 띄워도 될까요?</h2><div class="ending-buttons"><button id="endingYes">네 물론이죠 :)</button><button id="endingNo">그만하세요 이제</button></div></div></section>`;
+  document.getElementById('endingNo').addEventListener('click',()=>{
+    endingLayer.innerHTML='<section class="ending-choice ending-goodbye" role="status"><div class="ending-choice-head">새로운 알림</div><div class="ending-choice-content"><h2>네 알겠습니다ㅠ</h2></div></section>';
+    endingDelay(()=>{endingLayer.replaceChildren();endingLayer.style.background='#000'},1450);
+  });
+  document.getElementById('endingYes').addEventListener('click',floodEnding);
+}
+function floodEnding(){
+  endingLayer.replaceChildren();endingLayer.style.background='#c7ff29';
+  const deck=document.createElement('div');deck.className='ending-flood';endingLayer.append(deck);
+  const captions=['야호!','감사합니다!','팝업이다!','정말 좋아요!','하나 더!','특별 혜택!','기다리셨죠?','또 만났네요!','좋은 선택이에요!','서프라이즈!','축하합니다!','놓치지 마세요!','반가워요!','여기 또 있어요!','정말 감사합니다!','오늘도 팝업!','당신을 위한 알림!','마지막인 줄 알았죠?','팡!','팝업을 사랑해요!'];
+  const count=Math.max(75,Math.min(125,Math.ceil(innerWidth*innerHeight/10500)));
+  const showCard=i=>{
+    const item=document.createElement('div');item.className='ending-flood-card';
+    const w=150+Math.random()*160,h=98+Math.random()*80;
+    const maxX=Math.max(0,innerWidth-w),maxY=Math.max(0,innerHeight-h);
+    // Spread across screen, including all edges, rather than one pile in the center.
+    const cols=Math.max(3,Math.ceil(Math.sqrt(count*innerWidth/innerHeight)));
+    const rows=Math.max(3,Math.ceil(count/cols));
+    const shuffled=(i*37)%count;
+    const col=shuffled%cols,row=Math.floor(shuffled/cols)%rows;
+    const x=Math.max(-25,Math.min(maxX+25,((col+.1+Math.random()*.8)/cols)*innerWidth-w*.34));
+    const y=Math.max(-18,Math.min(maxY+18,((row+.1+Math.random()*.8)/rows)*innerHeight-h*.38));
+    item.style.cssText=`left:${x}px;top:${y}px;width:${w}px;min-height:${h}px;z-index:${i+1};rotate:${(Math.random()-.5)*9}deg`;
+    const title=document.createElement('div');title.className='ending-flood-title';
+    const titleText=document.createElement('span');titleText.textContent='새로운 알림';
+    const icon=document.createElement('span');icon.textContent='✳';title.append(titleText,icon);
+    const body=document.createElement('div');body.className='ending-flood-body';body.textContent=captions[Math.floor(Math.random()*captions.length)];
+    item.append(title,body);deck.append(item);
+  };
+  // One new window roughly every 22 ms; no buttons or Xs in the finale.
+  for(let i=0;i<count;i++)endingDelay(()=>showCard(i),i*22);
+}
+// Intro narrative: approval/refusal -> double approval -> approval/refusal -> refusal confirmation.
+const thirdIntro={title:'맞춤형 분석을 확인하시겠어요?',body:'답변에 어울리는 추가 분석과 추천 콘텐츠를 준비했어요. 지금 확인하시겠어요?',buttons:['네, 확인할게요','아니요, 괜찮아요'],rejectIndex:1};
+const refusalConfirm={title:'정말 거절하시겠어요?',body:'이 내용을 건너뛰면 조금 아쉬울 수도 있어요. 지금 선택을 다시 확인해 주세요.',buttons:['아니요','잘못 눌렀어요'],rejectIndex:null};
+const layer=document.getElementById('popupLayer');
+const $=id=>document.getElementById(id);
+const modes=['run','shrink','orbit','fake','jitter','decoy'];
+let modeBag=[];
+function nextMode(){
+  if(!modeBag.length){modeBag=[...modes];for(let i=modeBag.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[modeBag[i],modeBag[j]]=[modeBag[j],modeBag[i]]}}
+  return modeBag.pop();
+}
+function syncPopupLock(){
+  const locked=active.length>0;
+  layer.classList.toggle('is-blocking',locked);
+  $('test').inert=locked;
+}
+function show(id){['home','test'].forEach(k=>$(k).classList.toggle('hidden',k!==id))}
+function start(){
+  started=true;show('test');clearTimeout(spawnTimer);
+}
+$('start').onclick=start;
+$('testNav').onclick=()=>{if(!started)start();else show('test')};
+$('homeNav').onclick=()=>show('home');
+$('aboutNav').onclick=()=>toast('30개의 질문에 답하고 나만의 성격 유형을 알아보세요.');
+function render(){
+  $('count').textContent=`질문 ${String(index+1).padStart(2,'0')} / 30`;
+  $('question').textContent=questions[index].q;
+  $('choices').replaceChildren();
+  questions[index].a.forEach(([label,score],i)=>{
+    const b=document.createElement('button');b.className='choice';
+    b.innerHTML=`<span>${label}</span><b>0${i+1} ↗</b>`;
+    b.onclick=()=>answer(score);$('choices').append(b);
+  });
+  $('bar').style.width=`${index/30*100}%`;
+  syncPopupLock();
+}
+function answer(score){
+  if(active.length)return;
+  scores[score]++;index++;
+  if(index===30){
+    $('questionArea').hidden=true;$('resultArea').hidden=false;
+    const win=scores.indexOf(Math.max(...scores));
+    $('resultTitle').textContent=types[win][0];$('resultText').textContent=types[win][1];
+    $('count').textContent='완료 / 30';
+  }else render();
+  // The fifth question is already visible and clickable before the first overlay arrives.
+  if(index===4&&introStep===0){introStep=1;firstPopupTimer=setTimeout(()=>{if(started&&introStep===1)spawn('intro1')},1100)}
+}
+function toast(msg){
+  const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.append(t);
+  setTimeout(()=>t.remove(),2300);
+}
+function dismiss(el){
+  if(!el||!el.isConnected||el.dataset.persistent==='true')return;
+  el._stop=true;if(el._close)el._close.remove();
+  el.remove();active=active.filter(a=>a!==el);syncPopupLock();
+}
+// Only answering/confirming the three introductory prompts advances the opening.
+// After the third prompt returns from refusal confirmation, timing takes over.
+function finaleDelay(callback,ms){
+  const id=setTimeout(()=>{if(started&&!endingStarted)callback()},ms);
+  finaleTimers.push(id);return id;
+}
+function stopFinaleTimers(){finaleTimers.forEach(clearTimeout);finaleTimers=[];}
+function queueFirstAd(){
+  if(finalePhase!=='idle')return;
+  finalePhase='waiting-ad';
+  finaleDelay(()=>{
+    if(finalePhase!=='waiting-ad')return;
+    finalePhase='first-ad';
+    spawn('ad'); // Its X always uses edge-run, across the entire screen.
+    finaleDelay(showYesNo,3000);
+  },3000);
+}
+function showYesNo(){
+  if(finalePhase!=='first-ad')return;
+  finalePhase='yes-no';
+  spawn('custom',{
+    data:{title:'새로운 콘텐츠를 확인하시겠어요?',body:'지금 확인하면 더 많은 추천 정보를 만나실 수 있어요. 잠깐만 살펴보실래요?',buttons:['네, 확인할게요','아니요, 괜찮아요'],rejectIndex:1},
+    onChoose:(choice,el)=>{
+      if(finalePhase!=='yes-no')return;
+      if(choice===0){dismiss(el);showAcceptOnlyPair();}
+      else{
+        dismiss(el);
+        // The refusal is acknowledged, but the site insists on asking again.
+        finaleDelay(()=>{if(finalePhase==='yes-no')showYesNoAgain()},120);
+      }
+    }
+  });
+}
+function showYesNoAgain(){
+  if(finalePhase!=='yes-no')return;
+  spawn('custom',{
+    data:{title:'잠깐, 정말 괜찮으세요?',body:'확인 버튼을 누르면 다음 안내로 넘어갑니다. 이번 한 번만 다시 물어볼게요.',buttons:['네, 확인할게요','지금은 안 볼래요'],rejectIndex:1},
+    onChoose:(choice,el)=>{
+      dismiss(el);
+      if(finalePhase!=='yes-no')return;
+      if(choice===0)showAcceptOnlyPair();
+      else finaleDelay(showYesNoAgain,120);
+    }
+  });
+}
+function showAcceptOnlyPair(){
+  if(finalePhase!=='yes-no')return;
+  finalePhase='accept';approvalReceived=false;acceptOnlyShown=0;
+  const makeAccept=(title,body,label)=>{
+    acceptOnlyShown++;
+    spawn('custom',{
+      data:{title,body,buttons:[label],rejectIndex:null},
+      onChoose:(choice,el)=>{
+        if(finalePhase!=='accept')return;
+        approvalReceived=true;
+        dismiss(el);
+        // Continue as soon as the two accept-only windows have appeared.
+        if(acceptOnlyShown===2)beginCascade();
+      }
+    });
+  };
+  makeAccept('확인해 주셔서 감사해요!','추가 안내를 받아보실 준비가 되셨나요?','네, 수락할게요');
+  finaleDelay(()=>{
+    if(finalePhase!=='accept')return;
+    makeAccept('한 번만 더 확인해 주세요','좋은 정보를 전달하려고요. 이번에도 확인해 주세요.','수락하고 계속하기');
+    if(approvalReceived)beginCascade();
+    // Nobody needs to click: after two seconds, an ad and a notice appear anyway.
+    else finaleDelay(()=>{if(finalePhase==='accept')beginCascade()},2000);
+  },1000);
+}
+function beginCascade(){
+  if(finalePhase!=='accept')return;
+  finalePhase='cascade';
+  spawn('regular');
+  spawn('ad');
+  // Two more notices arrive before the final notice.
+  // After the FINAL notice appears, keep it visible for six full seconds.
+  finaleDelay(()=>{
+    if(finalePhase!=='cascade')return;
+    spawn('regular'); // extra notice 1
+    finaleDelay(()=>{
+      if(finalePhase!=='cascade')return;
+      spawn('regular'); // extra notice 2
+      finaleDelay(()=>{
+        if(finalePhase!=='cascade')return;
+        spawn('regular'); // final notice
+        finaleDelay(beginEnding,6000);
+      },850);
+    },850);
+  },850);
+}
+function spawn(forced='regular',options={}){
+  if(active.length>=10)return null;
+  const isAd=forced==='ad',isCustom=forced==='custom';
+  const isIntro1=forced==='intro1',isIntro2=forced==='intro2';
+  const isIntro3=forced==='intro3',isConfirm=forced==='confirm';
+  const data=isCustom?options.data:isAd?adData[(adCursor++)%adData.length]
+    :isIntro3?thirdIntro:isConfirm?refusalConfirm
+    :popupData[isIntro1?0:isIntro2?1:2+(sequence%Math.max(1,popupData.length-2))];
+  const firstAd=isAd&&!window.__firstAdShown;
+  if(firstAd)window.__firstAdShown=true;
+  const mode=firstAd?'edge-run':nextMode();sequence++;total++;
   const el=document.createElement('div');
   el.className='popup'+(isAd?' is-ad':'');
-  el.setAttribute('role','dialog');el.setAttribute('aria-label',data.title);
+  el.setAttribute('role','dialog');el.setAttribute('aria-label',isAd?data.alt:data.title);
   if(isAd)el.dataset.persistent='true';
-  const w=Math.min(isAd?430:390,innerWidth-24),h=isAd?340:245;
-  let x=Math.max(12,Math.min(innerWidth-w-12,innerWidth*.18+(sequence*173)%Math.max(160,innerWidth*.55)));
-  let y=Math.max(60,Math.min(innerHeight-h-20,75+(sequence*91)%Math.max(120,innerHeight*.4)));
+  const w=Math.min(isAd?448:390,innerWidth-24),h=isAd?476:255;
+  const maxX=Math.max(12,innerWidth-w-12),maxY=Math.max(50,innerHeight-h-12);
+  const x=Math.max(12,Math.min(maxX,innerWidth*.14+(sequence*157)%Math.max(130,innerWidth*.54)));
+  const y=Math.max(50,Math.min(maxY,68+(sequence*89)%Math.max(110,innerHeight*.42)));
   el.style.left=x+'px';el.style.top=y+'px';
-  // Window and close glyph are a pair of consecutive stacking layers.
+  // Every popup plus its X has its own ordered pair of z-index values.
   el.style.zIndex=String(total*2+1);
-  const safe=(value)=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const graphic=isAd?`<div class="ad-poster" style="--ad-color:${safe(data.color)}"><span class="ad-graphic" aria-hidden="true">${safe(data.graphic)}</span><span class="ad-sticker">${safe(data.sticker)}</span></div><div class="ad-meta"><span>추천 상품 · 오늘의 혜택</span><span>${safe(data.price)}</span></div>`:'';
-  el.innerHTML=`<div class="popup-head"><span>${isAd?'추천 광고 · 특별한 제안':'알림_'+String(total).padStart(3,'0')}</span><div class="close-placeholder"></div></div><div class="popup-body">${graphic}${!isAd?'<div class="micro">친절한 안내 메시지 ↗</div>':''}<h3>${safe(data.title)}</h3><p>${safe(data.body)}</p><div class="actions"></div>${isAd?'<p class="no-dismiss-note">광고가 화면에 계속 표시됩니다.</p>':''}</div>`;
+  const safe=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  el.innerHTML=isAd
+    ?`<div class="popup-head"><span>스페셜 프로모션</span><div class="close-placeholder"></div></div><div class="popup-body"><img class="ad-image" alt="${safe(data.alt)}" src="${data.src}"></div>`
+    :`<div class="popup-head"><span>새로운 알림</span><div class="close-placeholder"></div></div><div class="popup-body"><div class="micro">안내 메시지 ↗</div><h3>${safe(data.title)}</h3><p>${safe(data.body)}</p><div class="actions"></div></div>`;
   layer.append(el);active.push(el);syncPopupLock();
-  // Persist ads in the stack even if the user operates every available button.
-let close=document.createElement('button');close.className='close';close.style.zIndex=String(total*2+2);close.textContent='×';close.setAttribute('aria-label','작동하지 않는 닫기 버튼');close.tabIndex=-1;close.setAttribute('aria-disabled','true');layer.append(close);el._close=close;let pos={x:x+w-47,y:y+7},vel={x:0,y:0},size=32,phase=Math.random()*6.28,last=0;function frame(t){if(el._stop)return;let r=el.getBoundingClientRect(),target={x:r.right-47,y:r.top+7},cx=pos.x+size/2,cy=pos.y+size/2,d=Math.hypot(mouse.x-cx,mouse.y-cy),near=Math.max(0,1-d/210);
-// Each popup uses one distinct effect. X is never clickable: only popup actions work.
-close.style.opacity='1';close.style.rotate='0deg';close.style.borderRadius='0';close.style.filter='none';
-if(mode==='run'){
-  // Continuous screen-wide escape; not constrained by the popup's rectangle.
-  const dx=cx-mouse.x,dy=cy-mouse.y,inv=1/(d||1),force=near*9;
-  vel.x=vel.x*.93+dx*inv*force+(target.x-pos.x)*.0018;
-  vel.y=vel.y*.93+dy*inv*force+(target.y-pos.y)*.0018;
-  pos.x+=vel.x;pos.y+=vel.y;size=32;
-}else if(mode==='shrink'){
-  // Shrink IN PLACE as the pointer approaches: no escape movement.
-  pos.x+=(target.x-pos.x)*.16;pos.y+=(target.y-pos.y)*.16;
-  size+=(Math.max(2.5,32*(1-near*1.3))-size)*.22;
-}else if(mode==='orbit'){
-  // Start circling faster and on a larger orbit when chased.
-  const radius=near>0?35+near*140:10,angle=t/(460-near*330)+phase;
-  pos.x+=(target.x+Math.cos(angle)*radius-pos.x)*.15;
-  pos.y+=(target.y+Math.sin(angle)*radius-pos.y)*.15;size=32;
-  close.style.rotate=(t/8%360)+'deg';
-}else if(mode==='fake'){
-  // Fake-out: close glyph flips to other marks right before contact.
-  pos.x+=(target.x-pos.x)*.2;pos.y+=(target.y-pos.y)*.2;size=32;
-  close.textContent=near>.3?(['↗','♡','?','⋯'][Math.floor(t/170)%4]):'×';
-  close.style.borderRadius=near>.35?'50%':'0';
-}else if(mode==='jitter'){
-  // Trembling target, with non-linear wobble on close approach.
-  pos.x+=(target.x+(Math.sin(t/43+phase)*near*95)-pos.x)*.24;
-  pos.y+=(target.y+(Math.cos(t/55+phase)*near*110)-pos.y)*.24;
-  size=32;close.style.rotate=(near*Math.sin(t/40)*38)+'deg';
-}else if(mode==='decoy'){
-  // The glyph periodically vanishes and reappears; an optical bait-and-switch.
-  pos.x+=(target.x-pos.x)*.2;pos.y+=(target.y-pos.y)*.2;
-  size=32;close.textContent=near>.16?'·':'×';
-  close.style.opacity=near>.25?String(.18+.20*(1+Math.sin(t/85))):'1';
-  close.style.filter=near>.25?'blur(2px)':'none';
+  // The cross is deliberately non-interactive. It does not cause a dismissal.
+  const close=document.createElement('div');
+  close.className='close';close.style.zIndex=String(total*2+2);
+  close.textContent='×';close.setAttribute('aria-hidden','true');
+  layer.append(close);el._close=close;
+  const pos={x:x+w-47,y:y+7},vel={x:0,y:0};
+  let size=32;const phase=Math.random()*6.28;
+  function frame(t){
+    if(el._stop)return;
+    const r=el.getBoundingClientRect(),target={x:r.right-47,y:r.top+7};
+    const cx=pos.x+size/2,cy=pos.y+size/2,d=Math.hypot(mouse.x-cx,mouse.y-cy),near=Math.max(0,1-d/210);
+    close.style.opacity='1';close.style.rotate='0deg';close.style.borderRadius='0';close.style.filter='none';
+    if(mode==='edge-run'){
+      // First advertisement's X flees across the FULL viewport and seeks an edge.
+      const approach=Math.max(0,1-d/280);
+      if(approach>.03){
+        const dx=cx-mouse.x,dy=cy-mouse.y,inv=1/(d||1);
+        const push=4+approach*23;
+        vel.x=vel.x*.91+dx*inv*push;
+        vel.y=vel.y*.91+dy*inv*push;
+      }else{vel.x*=.90;vel.y*=.90;}
+      pos.x+=vel.x;pos.y+=vel.y;size=32;
+    }else if(mode==='run'){
+      const dx=cx-mouse.x,dy=cy-mouse.y,inv=1/(d||1),force=near*9;
+      vel.x=vel.x*.93+dx*inv*force+(target.x-pos.x)*.0018;
+      vel.y=vel.y*.93+dy*inv*force+(target.y-pos.y)*.0018;
+      pos.x+=vel.x;pos.y+=vel.y;size=32;
+    }else if(mode==='shrink'){
+      pos.x+=(target.x-pos.x)*.16;pos.y+=(target.y-pos.y)*.16;
+      size+=(Math.max(2.5,32*(1-near*1.3))-size)*.22;
+    }else if(mode==='orbit'){
+      const radius=near>0?35+near*140:10,angle=t/(460-near*330)+phase;
+      pos.x+=(target.x+Math.cos(angle)*radius-pos.x)*.15;
+      pos.y+=(target.y+Math.sin(angle)*radius-pos.y)*.15;
+      size=32;close.style.rotate=(t/8%360)+'deg';
+    }else if(mode==='fake'){
+      pos.x+=(target.x-pos.x)*.2;pos.y+=(target.y-pos.y)*.2;size=32;
+      close.textContent=near>.3?(['↗','♡','?','⋯'][Math.floor(t/170)%4]):'×';
+      close.style.borderRadius=near>.35?'50%':'0';
+    }else if(mode==='jitter'){
+      pos.x+=(target.x+(Math.sin(t/43+phase)*near*95)-pos.x)*.24;
+      pos.y+=(target.y+(Math.cos(t/55+phase)*near*110)-pos.y)*.24;
+      size=32;close.style.rotate=(near*Math.sin(t/40)*38)+'deg';
+    }else if(mode==='decoy'){
+      pos.x+=(target.x-pos.x)*.2;pos.y+=(target.y-pos.y)*.2;size=32;
+      close.textContent=near>.16?'·':'×';
+      close.style.opacity=near>.25?String(.18+.20*(1+Math.sin(t/85))):'1';
+      close.style.filter=near>.25?'blur(2px)':'none';
+    }
+    if(mode!=='fake'&&mode!=='decoy')close.textContent='×';
+    pos.x=Math.max(4,Math.min(innerWidth-size-4,pos.x));
+    pos.y=Math.max(4,Math.min(innerHeight-size-4,pos.y));
+    close.style.left=pos.x+'px';close.style.top=pos.y+'px';
+    close.style.width=size+'px';close.style.height=size+'px';
+    close.style.fontSize=Math.max(8,size*.65)+'px';
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  if(isAd)return el; // AD WINDOW: poster image only. No buttons or options.
+  // Refusal is clickable only in intro three; it opens a confirmation loop.
+  // All other notices retain their original approve/hover-disabled refusal behavior.
+  data.buttons.forEach((label,i)=>{
+    const slot=document.createElement('div');slot.className='action-slot';
+    const b=document.createElement('button');b.textContent=label;b.type='button';
+    const reject=data.rejectIndex===i;
+    if(isCustom){
+      b.addEventListener('click',()=>options.onChoose?.(i,el));
+    }else if(reject&&isIntro3){
+      slot.classList.add('reject');
+      b.addEventListener('click',()=>{
+        dismiss(el);
+        introStep=4;
+        spawn('confirm');
+      });
+    }else if(reject){
+      slot.classList.add('reject');
+      const disable=()=>{b.disabled=true;b.setAttribute('aria-disabled','true');slot.classList.add('is-disabled')};
+      const enable=()=>{b.disabled=false;b.setAttribute('aria-disabled','false');slot.classList.remove('is-disabled')};
+      slot.addEventListener('pointerenter',disable);
+      slot.addEventListener('pointerleave',enable);
+      b.addEventListener('focus',disable);
+      b.addEventListener('blur',enable);
+      b.addEventListener('click',e=>{e.preventDefault();});
+    }else{
+      b.addEventListener('click',()=>{
+        dismiss(el);
+        if(isIntro1){introStep=2;spawn('intro2');}
+        else if(isIntro2){introStep=3;spawn('intro3');}
+        else if(isConfirm){
+          introStep=3;
+          spawn('intro3');
+          queueFirstAd();
+        }else if(isIntro3){
+          introStep=5;
+          queueFirstAd();
+        }else {spawn('regular');}
+      });
+    }
+    slot.append(b);el.querySelector('.actions').append(slot);
+  });
+  return el;
 }
-if(mode!=='fake'&&mode!=='decoy')close.textContent='×';
-pos.x=Math.max(4,Math.min(innerWidth-size-4,pos.x));pos.y=Math.max(4,Math.min(innerHeight-size-4,pos.y));
-close.style.left=pos.x+'px';close.style.top=pos.y+'px';close.style.width=size+'px';close.style.height=size+'px';close.style.fontSize=Math.max(8,size*.65)+'px';
-requestAnimationFrame(frame)}requestAnimationFrame(frame);
-// X is intentionally non-interactive; all real actions remain accessible through popup buttons.
-data.buttons.forEach((label,i)=>{
- const b=document.createElement('button');b.textContent=label;
- if(isGate&&i===1){b.disabled=true;b.title='지금은 선택할 수 없습니다';b.style.opacity='.35';b.style.cursor='not-allowed';}
- b.onclick=()=>{
-  if(isGate){if(i===1)return;dismiss(el);spawn('ad');return;}
-  if(isAd){
-    // Advert buttons always respond, but never remove their window.
-    toast(i===0?'혜택을 확인했어요. 광고는 계속 표시됩니다.':'더 많은 정보를 준비했어요. 광고는 계속 표시됩니다.');
-    el.querySelector('.no-dismiss-note').textContent=i===0?'확인해 주셔서 감사합니다. 이 광고는 닫히지 않습니다.':'관심을 가져 주셔서 감사합니다. 이 광고는 닫히지 않습니다.';
-    if(i===1)setTimeout(()=>spawn('ad'),380);
+$('restart').onclick=()=>{
+  clearTimeout(spawnTimer);clearTimeout(adLaunchTimer);clearTimeout(firstPopupTimer);spawnTimer=null;adLaunchTimer=null;firstPopupTimer=null;
+  active.forEach(el=>{el._stop=true;el._close?.remove();el.remove()});active=[];
+  index=0;scores=[0,0,0,0];total=0;sequence=0;introStep=0;
+  adsUnlocked=false;mixBag=[];adCursor=0;endingStarted=false;finalePhase='idle';approvalReceived=false;acceptOnlyShown=0;stopFinaleTimers();window.__firstAdShown=false;endingTimers.forEach(clearTimeout);endingTimers=[];endingLayer.className='ending-layer';endingLayer.style.background='';endingLayer.replaceChildren();
+  $('questionArea').hidden=false;$('resultArea').hidden=true;
+  render();show('test');
+};
+document.addEventListener('pointermove',e=>{
+  mouse.x=e.clientX;mouse.y=e.clientY;
+  document.querySelectorAll('.eye').forEach(eye=>{
+    const r=eye.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+    const a=Math.atan2(mouse.y-cy,mouse.x-cx),d=Math.min(17,Math.hypot(mouse.x-cx,mouse.y-cy)/20);
+    eye.querySelector('.pupil').style.transform=`translate(${Math.cos(a)*d}px,${Math.sin(a)*d}px)`;
+  });
+});
+render();
+// Place the start button below the actual headline bounding box. The heading
+// scales with viewport width, so a fixed percentage caused accidental overlap.
+function alignHeroStart(){
+  const button=document.getElementById('start');
+  const hero=document.getElementById('home');
+  const heading=hero.querySelector('h1');
+  if(window.matchMedia('(max-width: 650px)').matches){
+    button.style.removeProperty('top');
+    button.classList.remove('aligned');
     return;
   }
-  dismiss(el);
-  toast(i===0?'선택을 접수했어요. 그런데 또 알림이 있네요.':'잠시 평화가 찾아왔습니다.');
-  if(i===0)setTimeout(()=>spawn(),600);
- };
- el.querySelector('.actions').append(b)
-});return el}
-$('restart').onclick=()=>{index=0;scores=[0,0,0,0];active.slice().forEach(el=>dismiss(el,true));mixBag=[];adCursor=0;adsUnlocked=false;gateShown=false;popupPending=false;syncPopupLock();$('questionArea').hidden=false;$('resultArea').hidden=true;render();show('test')};document.addEventListener('pointermove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;document.querySelectorAll('.eye').forEach(eye=>{let r=eye.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,a=Math.atan2(mouse.y-cy,mouse.x-cx),d=Math.min(17,Math.hypot(mouse.x-cx,mouse.y-cy)/20);eye.querySelector('.pupil').style.transform=`translate(${Math.cos(a)*d}px,${Math.sin(a)*d}px)`})});render();
+  const heroBox=hero.getBoundingClientRect();
+  const headingBox=heading.getBoundingClientRect();
+  const desiredTop=headingBox.bottom-heroBox.top+26;
+  const maximumTop=hero.clientHeight-button.offsetHeight-22;
+  button.style.top=Math.max(0,Math.min(desiredTop,maximumTop))+'px';
+  button.classList.add('aligned');
+}
+window.addEventListener('resize',alignHeroStart,{passive:true});
+window.addEventListener('load',alignHeroStart);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(alignHeroStart);
+requestAnimationFrame(alignHeroStart);
+
 </script></body></html>
